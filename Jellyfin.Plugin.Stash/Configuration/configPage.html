@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stash</title>
+</head>
+<body>
+    <div id="ConfigurationPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-button">
+        <div data-role="content">
+            <div class="content-primary">
+                <h1>Stash</h1>
+                <form id="ConfigForm">
+                    <div class="inputContainer">
+                        <label class="inputeLabel inputLabelUnfocused" for="StashEndpoint">Stash Endpoint</label>
+                        <input id="StashEndpoint" name="StashEndpoint" type="text" is="emby-input" />
+                    </div>                        
+                    <div class="inputContainer">
+                        <label class="inputeLabel inputLabelUnfocused" for="StashAPIKey">Stash API Key</label>
+                        <input id="StashAPIKey" name="StashAPIKey" type="password" is="emby-input" />
+                    </div>                
+                    <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                        <span>Save</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var pluginConfig = {
+                pluginUniqueId: '57b8ef5d-8835-436d-9514-a709ee25faf2'
+            };
+
+            $('#ConfigurationPage').on('pageshow', function () {
+                Dashboard.showLoadingMsg();
+                ApiClient.getPluginConfiguration(pluginConfig.pluginUniqueId).then(function (config) {
+                    $('#StashEndpoint').val(config.StashEndpoint).change();
+                    $('#StashAPIKey').val(config.StashAPIKey).change();
+
+                    Dashboard.hideLoadingMsg();
+                });
+            });
+
+            $('#ConfigurationPage').on('submit', function () {
+                Dashboard.showLoadingMsg();
+                ApiClient.getPluginConfiguration(pluginConfig.pluginUniqueId).then(function (config) {
+                    config.StashEndpoint = $('#StashEndpoint').val();
+                    config.StashAPIKey = $('#StashAPIKey').val();
+
+                    ApiClient.updatePluginConfiguration(pluginConfig.pluginUniqueId, config).then(function (result) {
+                        Dashboard.processPluginConfigurationUpdateResult(result);
+                    });
+                });
+                return false;
+            });
+        </script>
+    </div>
+</body>
+</html>

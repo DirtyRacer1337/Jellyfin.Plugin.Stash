@@ -12,7 +12,7 @@ jobs:
   jellyfin:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
@@ -23,7 +23,7 @@ jobs:
       - name: Rename Files
         run: ren Jellyfin.Plugin.Stash/bin/Release/net6.0/Stash.dll Jellyfin.Plugin.Stash.dll && ren Jellyfin.Plugin.Stash/bin/Release/net6.0/Stash.pdb Jellyfin.Plugin.Stash.pdb
 
-      - uses: vimtor/action-zip@v1
+      - uses: vimtor/action-zip@v1.1
         with:
           files: Jellyfin.Plugin.Stash/bin/Release/net6.0/Jellyfin.Plugin.Stash.pdb Jellyfin.Plugin.Stash/bin/Release/net6.0/Jellyfin.Plugin.Stash.dll
           dest: Jellyfin.Plugin.Stash.zip
@@ -37,7 +37,7 @@ jobs:
   emby:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
@@ -48,7 +48,7 @@ jobs:
       - name: Rename Files
         run: ren Jellyfin.Plugin.Stash/bin/Release.Emby/netstandard2.1/Stash.dll ./Emby.Plugins.Stash.dll && ren Jellyfin.Plugin.Stash/bin/Release.Emby/netstandard2.1/Stash.pdb ./Emby.Plugins.Stash.pdb
 
-      - uses: vimtor/action-zip@v1
+      - uses: vimtor/action-zip@v1.1
         with:
           files: Jellyfin.Plugin.Stash/bin/Release.Emby/netstandard2.1/Emby.Plugins.Stash.pdb Jellyfin.Plugin.Stash/bin/Release.Emby/netstandard2.1/Emby.Plugins.Stash.dll
           dest: Emby.Plugins.Stash.zip

@@ -79,16 +79,16 @@ namespace Stash.Providers
                 return result;
             }
 
-            query = HttpUtility.JavaScriptStringEncode(query);
+            query = HttpUtility.JavaScriptStringEncode(query.Trim());
 
             string searchData;
             if (!string.IsNullOrEmpty(path))
             {
-                searchData = string.Format("scene_filter: {{ path: {{ value: \"\\\"{0}\\\"\", modifier: INCLUDES }} }}", query);
+                searchData = string.Format("scene_filter:{{path:{{value:\"\\\"{0}\\\"\",modifier:INCLUDES}}}}", query);
             }
             else
             {
-                searchData = string.Format("filter: {{ q: \"\\\"{0}\\\"\" }}", query);
+                searchData = string.Format("filter:{{q:\"{0}\"}}", query);
             }
 
             var data = string.Format(Consts.SceneSearchQuery, searchData);
@@ -209,16 +209,16 @@ namespace Stash.Providers
             return result;
         }
 
-        public static async Task<List<RemoteSearchResult>> PerformersSearch(string actorName, CancellationToken cancellationToken)
+        public static async Task<List<RemoteSearchResult>> PerformersSearch(ItemLookupInfo searchInfo, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
-            if (string.IsNullOrEmpty(actorName))
+            if (string.IsNullOrEmpty(searchInfo.Name))
             {
                 return result;
             }
 
-            var query = HttpUtility.JavaScriptStringEncode(actorName);
-            string searchData = string.Format("filter: {{ q: \"\\\"{0}\\\"\" }}", query);
+            var query = HttpUtility.JavaScriptStringEncode(searchInfo.Name.Trim());
+            string searchData = string.Format("filter:{{q:\"{0}\"}}", query);
 
             var data = string.Format(Consts.PerformerSearchQuery, searchData);
             var http = await GetDataFromAPI(data, cancellationToken).ConfigureAwait(false);
@@ -302,16 +302,16 @@ namespace Stash.Providers
             return result;
         }
 
-        public static async Task<List<RemoteSearchResult>> StudiosSearch(string actorName, CancellationToken cancellationToken)
+        public static async Task<List<RemoteSearchResult>> StudiosSearch(ItemLookupInfo searchInfo, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
-            if (string.IsNullOrEmpty(actorName))
+            if (string.IsNullOrEmpty(searchInfo.Name))
             {
                 return result;
             }
 
-            var query = HttpUtility.JavaScriptStringEncode(actorName);
-            string searchData = string.Format("filter: {{ q: \"\\\"{0}\\\"\" }}", query);
+            var query = HttpUtility.JavaScriptStringEncode(searchInfo.Name.Trim());
+            string searchData = string.Format("filter:{{q:\"{0}\"}}", query);
 
             var data = string.Format(Consts.StudiosSearchQuery, searchData);
             var http = await GetDataFromAPI(data, cancellationToken).ConfigureAwait(false);

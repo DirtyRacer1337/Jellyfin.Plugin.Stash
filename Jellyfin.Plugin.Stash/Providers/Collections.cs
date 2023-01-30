@@ -36,7 +36,7 @@ namespace Stash.Providers
 
             try
             {
-                result = await StashAPI.StudiosSearch(searchInfo.Name, cancellationToken).ConfigureAwait(false);
+                result = await StashAPI.StudiosSearch(searchInfo, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {

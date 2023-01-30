@@ -32,7 +32,7 @@ namespace Stash.Providers
 
             try
             {
-                result = await StashAPI.PerformersSearch(searchInfo.Name, cancellationToken).ConfigureAwait(false);
+                result = await StashAPI.PerformersSearch(searchInfo, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {

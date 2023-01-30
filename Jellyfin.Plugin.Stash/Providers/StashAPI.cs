@@ -34,7 +34,7 @@ namespace Stash.Providers
                 headers.Add("APIKey", Plugin.Instance.Configuration.StashAPIKey);
             }
 
-            var url = Plugin.Instance.Configuration.StashEndpoint + string.Format("/graphql?query={0}", query);
+            var url = Plugin.Instance.Configuration.StashEndpoint + string.Format("/graphql?query={0}", Uri.EscapeDataString(query));
 
             var http = await HTTP.Request(url, cancellationToken, headers).ConfigureAwait(false);
             try
@@ -129,7 +129,7 @@ namespace Stash.Providers
                 People = new List<PersonInfo>(),
             };
 
-            var data = string.Format(Consts.SceneQuery, sceneID);
+            var data = string.Format(Consts.SceneQuery, HttpUtility.JavaScriptStringEncode(sceneID));
 
             var http = await GetDataFromAPI(data, cancellationToken).ConfigureAwait(false);
             if (http == null)
@@ -189,7 +189,7 @@ namespace Stash.Providers
                 return result;
             }
 
-            var data = string.Format(Consts.SceneQuery, sceneID);
+            var data = string.Format(Consts.SceneQuery, HttpUtility.JavaScriptStringEncode(sceneID));
 
             var http = await GetDataFromAPI(data, cancellationToken).ConfigureAwait(false);
             if (http == null)
@@ -209,7 +209,7 @@ namespace Stash.Providers
             return result;
         }
 
-        public static async Task<List<RemoteSearchResult>> PeopleSearch(string actorName, CancellationToken cancellationToken)
+        public static async Task<List<RemoteSearchResult>> PerformersSearch(string actorName, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (string.IsNullOrEmpty(actorName))
@@ -229,7 +229,7 @@ namespace Stash.Providers
             }
 
             data = http["data"]["findPerformers"]["performers"].ToString();
-            var searchResults = JsonConvert.DeserializeObject<List<Performers>>(data);
+            var searchResults = JsonConvert.DeserializeObject<List<Performer>>(data);
 
             foreach (var searchResult in searchResults)
             {
@@ -245,14 +245,14 @@ namespace Stash.Providers
             return result;
         }
 
-        public static async Task<MetadataResult<Person>> PeopleUpdate(string sceneID, CancellationToken cancellationToken)
+        public static async Task<MetadataResult<Person>> PerformerUpdate(string sceneID, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<Person>()
             {
                 Item = new Person(),
             };
 
-            var data = string.Format(Consts.PerformerQuery, sceneID);
+            var data = string.Format(Consts.PerformerQuery, HttpUtility.JavaScriptStringEncode(sceneID));
 
             var http = await GetDataFromAPI(data, cancellationToken).ConfigureAwait(false);
             if (http == null)
@@ -261,7 +261,7 @@ namespace Stash.Providers
             }
 
             data = http["data"]["findPerformer"].ToString();
-            var sceneData = JsonConvert.DeserializeObject<Performers>(data);
+            var sceneData = JsonConvert.DeserializeObject<Performer>(data);
 
             result.Item.OriginalTitle = string.Join(", ", sceneData.alias_list);
 
@@ -273,7 +273,7 @@ namespace Stash.Providers
             return result;
         }
 
-        public static async Task<IEnumerable<RemoteImageInfo>> PeopleImages(string sceneID, CancellationToken cancellationToken)
+        public static async Task<IEnumerable<RemoteImageInfo>> PerformerImages(string sceneID, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
@@ -282,7 +282,7 @@ namespace Stash.Providers
                 return result;
             }
 
-            var data = string.Format(Consts.PerformerQuery, sceneID);
+            var data = string.Format(Consts.PerformerQuery, HttpUtility.JavaScriptStringEncode(sceneID));
 
             var http = await GetDataFromAPI(data, cancellationToken).ConfigureAwait(false);
             if (http == null)
@@ -291,7 +291,7 @@ namespace Stash.Providers
             }
 
             data = http["data"]["findPerformer"].ToString();
-            var sceneData = JsonConvert.DeserializeObject<Performers>(data);
+            var sceneData = JsonConvert.DeserializeObject<Performer>(data);
 
             result.Add(new RemoteImageInfo
             {

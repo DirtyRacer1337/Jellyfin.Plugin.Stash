@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Stash.Models
 {
-    public struct Performers
+    public struct Performer
     {
         public string id;
         public string name;

@@ -12,6 +12,6 @@ namespace Stash.Models
         public Paths paths;
         public Studio? studio;
         public List<Tags> tags;
-        public List<Performers> performers;
+        public List<Performer> performers;
     }
 }

@@ -32,7 +32,7 @@ namespace Stash.Providers
 
             try
             {
-                result = await StashAPI.PeopleSearch(searchInfo.Name, cancellationToken).ConfigureAwait(false);
+                result = await StashAPI.PerformersSearch(searchInfo.Name, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -73,7 +73,7 @@ namespace Stash.Providers
 
             try
             {
-                result = await StashAPI.PeopleUpdate(curID, cancellationToken).ConfigureAwait(false);
+                result = await StashAPI.PerformerUpdate(curID, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {

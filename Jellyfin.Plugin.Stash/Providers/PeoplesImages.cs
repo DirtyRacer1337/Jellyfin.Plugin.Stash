@@ -45,7 +45,7 @@ namespace Stash.Providers
 
             try
             {
-                images = await StashAPI.PeopleImages(curID, cancellationToken).ConfigureAwait(false);
+                images = await StashAPI.PerformerImages(curID, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {

@@ -301,5 +301,94 @@ namespace Stash.Providers
 
             return result;
         }
+
+        public static async Task<List<RemoteSearchResult>> StudiosSearch(string actorName, CancellationToken cancellationToken)
+        {
+            var result = new List<RemoteSearchResult>();
+            if (string.IsNullOrEmpty(actorName))
+            {
+                return result;
+            }
+
+            var query = HttpUtility.JavaScriptStringEncode(actorName);
+            string searchData = string.Format("filter: {{ q: \"\\\"{0}\\\"\" }}", query);
+
+            var data = string.Format(Consts.StudiosSearchQuery, searchData);
+            var http = await GetDataFromAPI(data, cancellationToken).ConfigureAwait(false);
+
+            if (http == null)
+            {
+                return result;
+            }
+
+            data = http["data"]["findStudios"]["studios"].ToString();
+            var searchResults = JsonConvert.DeserializeObject<List<Models.Studio>>(data);
+
+            foreach (var searchResult in searchResults)
+            {
+                result.Add(new RemoteSearchResult
+                {
+                    ProviderIds = { { Plugin.Instance.Name, searchResult.id } },
+                    Name = searchResult.name,
+                    ImageUrl = searchResult.image_path,
+                });
+            }
+
+            return result;
+        }
+
+        public static async Task<MetadataResult<BoxSet>> StudioUpdate(string sceneID, CancellationToken cancellationToken)
+        {
+            var result = new MetadataResult<BoxSet>()
+            {
+                Item = new BoxSet(),
+            };
+
+            var data = string.Format(Consts.StudioQuery, HttpUtility.JavaScriptStringEncode(sceneID));
+
+            var http = await GetDataFromAPI(data, cancellationToken).ConfigureAwait(false);
+            if (http == null)
+            {
+                return result;
+            }
+
+            /*
+            data = http["data"]["findStudio"].ToString();
+            var sceneData = JsonConvert.DeserializeObject<Models.Studio>(data);
+
+            result.HasMetadata = true;
+            */
+
+            return result;
+        }
+
+        public static async Task<IEnumerable<RemoteImageInfo>> StudioImages(string sceneID, CancellationToken cancellationToken)
+        {
+            var result = new List<RemoteImageInfo>();
+
+            if (sceneID == null)
+            {
+                return result;
+            }
+
+            var data = string.Format(Consts.StudioQuery, HttpUtility.JavaScriptStringEncode(sceneID));
+
+            var http = await GetDataFromAPI(data, cancellationToken).ConfigureAwait(false);
+            if (http == null)
+            {
+                return result;
+            }
+
+            data = http["data"]["findStudio"].ToString();
+            var sceneData = JsonConvert.DeserializeObject<Models.Studio>(data);
+
+            result.Add(new RemoteImageInfo
+            {
+                Type = ImageType.Logo,
+                Url = sceneData.image_path,
+            });
+
+            return result;
+        }
     }
 }

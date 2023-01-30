@@ -84,6 +84,11 @@ namespace Stash.Providers
                 Logger.Error($"Studio Update error: \"{e}\"");
             }
 
+            if (result.HasMetadata)
+            {
+                result.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
+            }
+
             return result;
         }
 

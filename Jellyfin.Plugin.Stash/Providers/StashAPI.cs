@@ -355,9 +355,9 @@ namespace Stash.Providers
             /*
             data = http["data"]["findStudio"].ToString();
             var sceneData = JsonConvert.DeserializeObject<Models.Studio>(data);
+            */
 
             result.HasMetadata = true;
-            */
 
             return result;
         }

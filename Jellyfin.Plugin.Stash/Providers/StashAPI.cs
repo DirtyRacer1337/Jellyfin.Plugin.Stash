@@ -68,7 +68,6 @@ namespace Stash.Providers
 #else
             var path = searchInfo.Path;
 #endif
-
             if (!string.IsNullOrEmpty(path))
             {
                 query = Path.GetFileNameWithoutExtension(path);
@@ -109,12 +108,22 @@ namespace Stash.Providers
 
             foreach (var searchResult in searchResults)
             {
+                string ReturnedImageUrl = searchResult.paths.screenshot;
+
+                if (searchResult.movies.Count != 0)
+                    {
+                        if (searchResult.movies[0].movie.front_image_path != null)
+                        {
+                            ReturnedImageUrl = searchResult.movies[0].movie.front_image_path;
+                        }
+                    }
+
                 result.Add(new RemoteSearchResult
                 {
                     ProviderIds = { { Plugin.Instance.Name, searchResult.id } },
                     Name = searchResult.title,
                     PremiereDate = searchResult.date,
-                    ImageUrl = searchResult.paths.screenshot,
+                    ImageUrl = ReturnedImageUrl,
                 });
             }
 
@@ -156,6 +165,20 @@ namespace Stash.Providers
                 result.Item.AddStudio(studioName);
             }
 
+            if (sceneData.movies.Count != 0)
+                    {
+                        if (sceneData.movies[0].movie.director != null)
+                        {
+                            var director = new PersonInfo
+                            {
+                                Name = sceneData.movies[0].movie.director,
+                                Type = PersonType.Director,
+                            };
+
+                            result.AddPerson(director);
+                        }
+                    }
+
             foreach (var genreLink in sceneData.tags)
             {
                 var genreName = genreLink.name;
@@ -183,7 +206,6 @@ namespace Stash.Providers
         public static async Task<IEnumerable<RemoteImageInfo>> SceneImages(string sceneID, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
-
             if (sceneID == null)
             {
                 return result;
@@ -199,11 +221,20 @@ namespace Stash.Providers
 
             data = http["data"]["findScene"].ToString();
             var sceneData = JsonConvert.DeserializeObject<Scene>(data);
+            string ReturnedImageUrl = sceneData.paths.screenshot;
+
+            if (sceneData.movies.Count != 0)
+                {
+                    if (sceneData.movies[0].movie.front_image_path != null)
+                    {
+                        ReturnedImageUrl = sceneData.movies[0].movie.front_image_path;
+                    }
+                }
 
             result.Add(new RemoteImageInfo
             {
                 Type = ImageType.Primary,
-                Url = sceneData.paths.screenshot,
+                Url = ReturnedImageUrl,
             });
 
             return result;

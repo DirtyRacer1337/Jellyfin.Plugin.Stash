@@ -68,9 +68,10 @@ namespace Stash.Providers
 #else
             var path = searchInfo.Path;
 #endif
+
             if (!string.IsNullOrEmpty(path))
             {
-                query = Path.GetFileNameWithoutExtension(path);
+                query = System.IO.Path.GetFileNameWithoutExtension(path);
             }
 
             if (string.IsNullOrEmpty(query))
@@ -108,33 +109,23 @@ namespace Stash.Providers
 
             foreach (var searchResult in searchResults)
             {
-                string ReturnedImageUrl = searchResult.paths.screenshot;
-
-                if (searchResult.movies.Count != 0)
-                    {
-                        if (searchResult.movies[0].movie.front_image_path != null)
-                        {
-                            ReturnedImageUrl = searchResult.movies[0].movie.front_image_path;
-                        }
-                    }
-
                 result.Add(new RemoteSearchResult
                 {
                     ProviderIds = { { Plugin.Instance.Name, searchResult.id } },
                     Name = searchResult.title,
                     PremiereDate = searchResult.date,
-                    ImageUrl = ReturnedImageUrl,
+                    ImageUrl = searchResult.movies.FirstOrDefault()?.movie.front_image_path ?? searchResult.paths.screenshot,
                 });
             }
 
             return result;
         }
 
-        public static async Task<MetadataResult<Movie>> SceneUpdate(string sceneID, CancellationToken cancellationToken)
+        public static async Task<MetadataResult<MediaBrowser.Controller.Entities.Movies.Movie>> SceneUpdate(string sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<MediaBrowser.Controller.Entities.Movies.Movie>()
             {
-                Item = new Movie(),
+                Item = new MediaBrowser.Controller.Entities.Movies.Movie(),
                 People = new List<PersonInfo>(),
             };
 
@@ -165,25 +156,23 @@ namespace Stash.Providers
                 result.Item.AddStudio(studioName);
             }
 
-            if (sceneData.movies.Count != 0)
-                    {
-                        if (sceneData.movies[0].movie.director != null)
-                        {
-                            var director = new PersonInfo
-                            {
-                                Name = sceneData.movies[0].movie.director,
-                                Type = PersonType.Director,
-                            };
-
-                            result.AddPerson(director);
-                        }
-                    }
-
             foreach (var genreLink in sceneData.tags)
             {
                 var genreName = genreLink.name;
 
                 result.Item.AddGenre(genreName);
+            }
+
+            var directorName = sceneData.movies.FirstOrDefault()?.movie.director;
+            if (!string.IsNullOrEmpty(directorName))
+            {
+                var director = new PersonInfo
+                {
+                    Name = directorName,
+                    Type = PersonType.Director,
+                };
+
+                result.AddPerson(director);
             }
 
             foreach (var actorLink in sceneData.performers)
@@ -221,20 +210,11 @@ namespace Stash.Providers
 
             data = http["data"]["findScene"].ToString();
             var sceneData = JsonConvert.DeserializeObject<Scene>(data);
-            string ReturnedImageUrl = sceneData.paths.screenshot;
-
-            if (sceneData.movies.Count != 0)
-                {
-                    if (sceneData.movies[0].movie.front_image_path != null)
-                    {
-                        ReturnedImageUrl = sceneData.movies[0].movie.front_image_path;
-                    }
-                }
 
             result.Add(new RemoteImageInfo
             {
                 Type = ImageType.Primary,
-                Url = ReturnedImageUrl,
+                Url = sceneData.movies.FirstOrDefault()?.movie.front_image_path ?? sceneData.paths.screenshot,
             });
 
             return result;

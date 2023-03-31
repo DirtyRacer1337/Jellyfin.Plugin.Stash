@@ -1,6 +1,6 @@
 namespace Stash.Models
 {
-    public struct Tags
+    public struct Tag
     {
         public string name;
     }

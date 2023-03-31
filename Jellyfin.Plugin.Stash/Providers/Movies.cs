@@ -109,9 +109,9 @@ namespace Stash.Providers
                     foreach (var actorLink in result.People)
                     {
                         if (actorLink.Type == null)
-                    {
-                        actorLink.Type = PersonType.Actor;
-                    }
+                        {
+                            actorLink.Type = PersonType.Actor;
+                        }
                     }
                 }
             }

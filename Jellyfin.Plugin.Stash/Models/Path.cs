@@ -1,6 +1,6 @@
 namespace Stash.Models
 {
-    public struct Paths
+    public struct Path
     {
         public string screenshot;
     }

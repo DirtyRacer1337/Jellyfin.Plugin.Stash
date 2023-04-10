@@ -71,7 +71,7 @@ namespace Stash.Providers
 
             if (!string.IsNullOrEmpty(path))
             {
-                query = Path.GetFileNameWithoutExtension(path);
+                query = System.IO.Path.GetFileNameWithoutExtension(path);
             }
 
             if (string.IsNullOrEmpty(query))
@@ -114,18 +114,18 @@ namespace Stash.Providers
                     ProviderIds = { { Plugin.Instance.Name, searchResult.id } },
                     Name = searchResult.title,
                     PremiereDate = searchResult.date,
-                    ImageUrl = searchResult.paths.screenshot,
+                    ImageUrl = await ImageHelper.GetImageSizeAndValidate(searchResult.movies.FirstOrDefault()?.movie.front_image_path, cancellationToken) ?? searchResult.paths.screenshot,
                 });
             }
 
             return result;
         }
 
-        public static async Task<MetadataResult<Movie>> SceneUpdate(string sceneID, CancellationToken cancellationToken)
+        public static async Task<MetadataResult<MediaBrowser.Controller.Entities.Movies.Movie>> SceneUpdate(string sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<MediaBrowser.Controller.Entities.Movies.Movie>()
             {
-                Item = new Movie(),
+                Item = new MediaBrowser.Controller.Entities.Movies.Movie(),
                 People = new List<PersonInfo>(),
             };
 
@@ -163,6 +163,18 @@ namespace Stash.Providers
                 result.Item.AddGenre(genreName);
             }
 
+            var directorName = sceneData.movies.FirstOrDefault()?.movie.director;
+            if (!string.IsNullOrEmpty(directorName))
+            {
+                var director = new PersonInfo
+                {
+                    Name = directorName,
+                    Type = PersonType.Director,
+                };
+
+                result.AddPerson(director);
+            }
+
             foreach (var actorLink in sceneData.performers)
             {
                 var actor = new PersonInfo
@@ -183,7 +195,6 @@ namespace Stash.Providers
         public static async Task<IEnumerable<RemoteImageInfo>> SceneImages(string sceneID, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
-
             if (sceneID == null)
             {
                 return result;
@@ -203,7 +214,7 @@ namespace Stash.Providers
             result.Add(new RemoteImageInfo
             {
                 Type = ImageType.Primary,
-                Url = sceneData.paths.screenshot,
+                Url = sceneData.movies.FirstOrDefault()?.movie.front_image_path ?? sceneData.paths.screenshot,
             });
 
             return result;

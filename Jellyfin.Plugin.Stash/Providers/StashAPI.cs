@@ -278,6 +278,16 @@ namespace Stash.Providers
 
             result.Item.PremiereDate = sceneData.birthdate;
             result.Item.EndDate = sceneData.death_date;
+            if (sceneData.country.Any())
+                {
+                    var bornPlaceList = new List<string>();
+                    var location = new RegionInfo(sceneData.country.Trim()).EnglishName;
+                    if (!string.IsNullOrEmpty(location))
+                        {
+                            bornPlaceList.Add(location);
+                            result.Item.ProductionLocations = new string[] { string.Join(", ", bornPlaceList) };
+                        }
+                }
 
             result.HasMetadata = true;
 

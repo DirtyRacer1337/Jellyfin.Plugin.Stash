@@ -214,7 +214,7 @@ namespace Stash.Providers
             result.Add(new RemoteImageInfo
             {
                 Type = ImageType.Primary,
-                Url = sceneData.movies.FirstOrDefault()?.movie.front_image_path ?? sceneData.paths.screenshot,
+                Url = await ImageHelper.GetImageSizeAndValidate(sceneData.movies.FirstOrDefault()?.movie.front_image_path, cancellationToken) ?? sceneData.paths.screenshot,
             });
 
             return result;

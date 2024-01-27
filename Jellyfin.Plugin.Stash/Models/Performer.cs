@@ -7,6 +7,7 @@ namespace Stash.Models
     {
         public string id;
         public string name;
+        public string? disambiguation;
         public string image_path;
         public List<string> alias_list;
         public DateTime? birthdate;

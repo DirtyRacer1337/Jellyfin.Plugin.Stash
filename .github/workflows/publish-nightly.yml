@@ -59,18 +59,21 @@ jobs:
       with:
           prerelease: false
           fail_on_unmatched_files: true
-          tag_name: nightly
+          tag_name: latest_jellyfin
+          name: Development Build for Jellyfin
           files: |
             _dist/*
             build.yaml
           body: |
-            Nightly build
+            Nightly build.
+            Add https://raw.githubusercontent.com/${{github.repository}}/manifest-release/manifest.json
+            to your repositories to use.
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Publish Plugin Manifest
       uses: Kevinjil/jellyfin-plugin-repo-action@a7832ecc44c6b1a45d531970f6647b8682b005b8
       with:
-        ignorePrereleases: false
+        ignorePrereleases: true
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
         pagesBranch: manifest-release

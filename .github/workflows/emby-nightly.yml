@@ -1,4 +1,4 @@
-name: Build
+name: Publish Nightly for Emby
 on:
   push:
     branches:
@@ -44,8 +44,8 @@ jobs:
       - uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
+          automatic_release_tag: "latest_emby"
           prerelease: true
-          title: "Development Build"
+          title: "Development Build for Emby"
           files: |
             **/Emby.Plugins.Stash.zip

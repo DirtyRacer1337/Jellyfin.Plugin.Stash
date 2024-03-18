@@ -1,4 +1,4 @@
-name: Publish Nightly
+name: Publish Nightly for Jellyfin
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  jellyfin:
 
     runs-on: ubuntu-latest
 

@@ -1,0 +1,16 @@
+name: "Stash"
+guid: "af765402-cf54-4aa5-8fec-3ceb44fd8476"
+version: "1.0.0.1"
+targetAbi: "10.8.0.0"
+framework: "net6.0"
+owner: DirtyRacer1337
+overview: Metadata Provider for Self Hosted Stash Instance
+description: |
+  This plugin allows the user to configure a self-hosted stash instance as a
+  metadata provider
+category: "Metadata"
+artifacts:
+  - "Stash.dll"
+  - "Stash.pdb"
+changelog: |
+  1.0.0.1: Initial Release

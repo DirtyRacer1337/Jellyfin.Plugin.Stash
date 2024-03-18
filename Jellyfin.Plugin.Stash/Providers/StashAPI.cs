@@ -58,38 +58,68 @@ namespace Stash.Providers
             return json;
         }
 
+        private static string GetSearchDataString(string path, string name)
+        {
+            var query = name.Trim();
+            if (string.IsNullOrEmpty(path))
+            {
+                // No value for path, use basic filter
+                query = HttpUtility.JavaScriptStringEncode(query);
+                return string.Format("filter:{{q:\"{0}\"}}", query);
+            }
+
+            // If setting of use full path is false, then the query will not strip the path
+            if (!Plugin.Instance.Configuration.UseFullPathToSearch)
+            {
+                query = Path.GetFileNameWithoutExtension(path).Trim();
+                return string.Format(
+                    @"
+                    scene_filter:{
+                        {
+                            path:{
+                                {
+                                    value:""{0}"",
+                                    modifier:INCLUDES
+                                }
+                            }
+                        }
+                    }",
+                    HttpUtility.JavaScriptStringEncode(query));
+            }
+
+            query = path.Trim();
+
+            return string.Format(
+                @"
+                scene_filter:{
+                    {
+                        path:{
+                            {
+                                value:""{0}"",
+                                modifier:EQUALS
+                            }
+                        }
+                    }
+                }",
+                HttpUtility.JavaScriptStringEncode(query));
+        }
+
         public static async Task<List<RemoteSearchResult>> SceneSearch(ItemLookupInfo searchInfo, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
 
-            var query = searchInfo.Name;
 #if __EMBY__
             string path = string.Empty;
 #else
             var path = searchInfo.Path;
 #endif
 
-            if (!string.IsNullOrEmpty(path))
-            {
-                query = Path.GetFileNameWithoutExtension(path);
-            }
-
-            if (string.IsNullOrEmpty(query))
+            if (string.IsNullOrEmpty(path) && string.IsNullOrEmpty(searchInfo.Name))
             {
                 return result;
             }
 
-            query = HttpUtility.JavaScriptStringEncode(query.Trim());
-
-            string searchData;
-            if (!string.IsNullOrEmpty(path))
-            {
-                searchData = string.Format("scene_filter:{{path:{{value:\"\\\"{0}\\\"\",modifier:INCLUDES}}}}", query);
-            }
-            else
-            {
-                searchData = string.Format("filter:{{q:\"{0}\"}}", query);
-            }
+            var searchData = GetSearchDataString(path, searchInfo.Name);
 
             var data = string.Format(Consts.SceneSearchQuery, searchData);
             var http = await GetDataFromAPI(data, cancellationToken).ConfigureAwait(false);

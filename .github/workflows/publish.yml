@@ -1,0 +1,53 @@
+name: Publish Release
+
+on:
+  release:
+    types:
+      - released
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      dotnet-version: "6.0.*"
+      dotnet-target:  "net6.0"
+  upload:
+    runs-on: ubuntu-latest
+    needs:
+    - build
+    steps:
+    - name: Download Artifact
+      uses: actions/download-artifact@v2.1.0
+      with:
+        name: build-artifact
+    - name: Prepare GitHub Release assets
+      run: |-
+        for file in ./*; do
+          md5sum ${file#./} >> ${file%.*}.md5
+          sha256sum ${file#./} >> ${file%.*}.sha256
+        done
+        ls -l
+    - name: Publish output artifacts
+      id: publish-assets
+      uses: softprops/action-gh-release@50195ba7f6f93d1ac97ba8332a178e008ad176aa
+      with:
+          prerelease: false
+          fail_on_unmatched_files: true
+          tag_name:  ${{ github.event.release.tag_name }}
+          files: ./*
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  generate:
+    runs-on: ubuntu-latest
+    needs:
+    - upload
+    steps:
+    - name: Publish Plugin Manifest
+      uses: Kevinjil/jellyfin-plugin-repo-action@a7832ecc44c6b1a45d531970f6647b8682b005b8
+      with:
+        ignorePrereleases: true
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
+        pagesBranch: manifest-release
+        pagesFile: manifest.json

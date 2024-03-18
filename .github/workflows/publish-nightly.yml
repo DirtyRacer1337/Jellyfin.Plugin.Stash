@@ -28,6 +28,13 @@ jobs:
         value: "0.0.0.9000"
         commitChange: false
         updateFile: true
+    - name: Rename Files
+      run: |-
+        pushd Jellyfin.Plugin.Stash/bin/Release/net6.0/
+        mv Stash.dll Jellyfin.Plugin.Stash.dll
+        mv Stash.pdb Jellyfin.Plugin.Stash.pdb
+        ls -l
+        popd
     - name: "JPRM: Build"
       id: jrpm
       uses: oddstr13/jellyfin-plugin-repository-manager@b9e92867a6aa279d611a5ea80cf61f6358838c39

@@ -39,7 +39,7 @@ jobs:
 
       - name: "JPRM: Build"
         id: jrpm
-        uses: oddstr13/jellyfin-plugin-repository-manager@b9e92867a6aa279d611a5ea80cf61f6358838c39
+        uses: oddstr13/jellyfin-plugin-repository-manager@c50dc5dd020159a7aaa013ec7047f8043f8ea8a8
         with:
           version: "0.0.0.9000"
           verbosity: debug

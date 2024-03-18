@@ -73,14 +73,26 @@ namespace Stash.Providers
             {
                 query = Path.GetFileNameWithoutExtension(path).Trim();
                 return string.Format(
-                    "scene_filter:{{path:{{value:\"\\\"{0}\\\"\",modifier:INCLUDES}}}}",
+                    @"
+                    scene_filter:{{
+                        path:{{
+                                value:""{0}"",
+                                modifier:INCLUDES
+                            }}
+                    }}",
                     HttpUtility.JavaScriptStringEncode(query));
             }
 
             query = path.Trim();
 
             return string.Format(
-                "scene_filter:{{path:{{value:\"\\\"{0}\\\"\",modifier:EQUALS}}}}",
+                @"
+                scene_filter:{{
+                        path:{{
+                                value:""{0}"",
+                                modifier:EQUALS
+                            }}
+                }}",
                 HttpUtility.JavaScriptStringEncode(query));
         }
 

@@ -8,7 +8,7 @@ overview: Metadata Provider for Self Hosted Stash Instance
 description: |
   This plugin allows users to sign in through an SSO provider (such as Google, Facebook, or your own provider). This enables one-click signin.
   Review documentation at https://github.com/9p4/jellyfin-plugin-sso
-category: "Authentication"
+category: "Metadata"
 artifacts:
   - "Stash.dll"
   - "Stash.pdb"

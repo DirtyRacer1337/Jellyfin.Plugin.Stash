@@ -9,51 +9,6 @@ on:
       - .github/**
 
 jobs:
-  jellyfin:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
-
-      - name: Build app for release
-        run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release
-
-      - name: Rename Files
-        run: ren Jellyfin.Plugin.Stash/bin/Release/net6.0/Stash.dll Jellyfin.Plugin.Stash.dll && ren Jellyfin.Plugin.Stash/bin/Release/net6.0/Stash.pdb Jellyfin.Plugin.Stash.pdb
-
-      - name: "Flag as nightly in build.yaml"
-        uses: fjogeleit/yaml-update-action@v0.10.0
-        with:
-          valueFile: 'build.yaml'
-          propertyPath: 'version'
-          value: "0.0.0.9000"
-          commitChange: false
-          updateFile: true
-
-      - uses: vimtor/action-zip@v1.1
-        with:
-          files: Jellyfin.Plugin.Stash/bin/Release/net6.0/Jellyfin.Plugin.Stash.pdb Jellyfin.Plugin.Stash/bin/Release/net6.0/Jellyfin.Plugin.Stash.dll
-          dest: Jellyfin.Plugin.Stash.zip
-
-      # - name: "JPRM: Build"
-      #   id: jrpm
-      #   uses: oddstr13/jellyfin-plugin-repository-manager@c50dc5dd020159a7aaa013ec7047f8043f8ea8a8
-      #   with:
-      #     version: "0.0.0.9000"
-      #     verbosity: debug
-      #     path: .
-      #     dotnet-target: "net6.0"
-      #     output: _dist
-      - uses: actions/upload-artifact@v3
-        with:
-          if-no-files-found: error
-          name: Jellyfin
-          retention-days: 90
-          path: |
-            Jellyfin.Plugin.Stash.zip
-            build.yaml
   emby:
     runs-on: windows-latest
     steps:
@@ -81,7 +36,7 @@ jobs:
           path: Emby.Plugins.Stash.zip
   deploy:
     runs-on: ubuntu-latest
-    needs: [jellyfin, emby]
+    needs: [emby]
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v3
@@ -93,6 +48,4 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            **/Jellyfin.Plugin.Stash.zip
             **/Emby.Plugins.Stash.zip
-            **/build.yaml

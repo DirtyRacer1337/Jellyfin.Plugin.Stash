@@ -6,8 +6,8 @@ framework: "net6.0"
 owner: DirtyRacer1337
 overview: Metadata Provider for Self Hosted Stash Instance
 description: |
-  This plugin allows users to sign in through an SSO provider (such as Google, Facebook, or your own provider). This enables one-click signin.
-  Review documentation at https://github.com/9p4/jellyfin-plugin-sso
+  This plugin allows the user to configure a self-hosted stash instance as a
+  metadata provider
 category: "Authentication"
 artifacts:
   - "Stash.dll"

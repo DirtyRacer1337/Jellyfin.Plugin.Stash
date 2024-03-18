@@ -23,17 +23,38 @@ jobs:
       - name: Rename Files
         run: ren Jellyfin.Plugin.Stash/bin/Release/net6.0/Stash.dll Jellyfin.Plugin.Stash.dll && ren Jellyfin.Plugin.Stash/bin/Release/net6.0/Stash.pdb Jellyfin.Plugin.Stash.pdb
 
+      - name: "Flag as nightly in build.yaml"
+        uses: fjogeleit/yaml-update-action@v0.10.0
+        with:
+          valueFile: 'build.yaml'
+          propertyPath: 'version'
+          value: "0.0.0.9000"
+          commitChange: false
+          updateFile: true
+
       - uses: vimtor/action-zip@v1.1
         with:
           files: Jellyfin.Plugin.Stash/bin/Release/net6.0/Jellyfin.Plugin.Stash.pdb Jellyfin.Plugin.Stash/bin/Release/net6.0/Jellyfin.Plugin.Stash.dll
           dest: Jellyfin.Plugin.Stash.zip
+
+      - name: "JPRM: Build"
+        id: jrpm
+        uses: oddstr13/jellyfin-plugin-repository-manager@b9e92867a6aa279d611a5ea80cf61f6358838c39
+        with:
+          version: "0.0.0.9000"
+          verbosity: debug
+          path: .
+          dotnet-target: "net6.0"
+          output: _dist
 
       - uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error
           name: Jellyfin
           retention-days: 90
-          path: Jellyfin.Plugin.Stash.zip
+          path: |
+            Jellyfin.Plugin.Stash.zip
+            build.yaml
   emby:
     runs-on: windows-latest
     steps:
@@ -75,3 +96,4 @@ jobs:
           files: |
             **/Jellyfin.Plugin.Stash.zip
             **/Emby.Plugins.Stash.zip
+            **/build.yaml

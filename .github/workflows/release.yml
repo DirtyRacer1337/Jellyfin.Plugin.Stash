@@ -37,16 +37,15 @@ jobs:
           files: Jellyfin.Plugin.Stash/bin/Release/net6.0/Jellyfin.Plugin.Stash.pdb Jellyfin.Plugin.Stash/bin/Release/net6.0/Jellyfin.Plugin.Stash.dll
           dest: Jellyfin.Plugin.Stash.zip
 
-      - name: "JPRM: Build"
-        id: jrpm
-        uses: oddstr13/jellyfin-plugin-repository-manager@c50dc5dd020159a7aaa013ec7047f8043f8ea8a8
-        with:
-          version: "0.0.0.9000"
-          verbosity: debug
-          path: .
-          dotnet-target: "net6.0"
-          output: _dist
-
+      # - name: "JPRM: Build"
+      #   id: jrpm
+      #   uses: oddstr13/jellyfin-plugin-repository-manager@c50dc5dd020159a7aaa013ec7047f8043f8ea8a8
+      #   with:
+      #     version: "0.0.0.9000"
+      #     verbosity: debug
+      #     path: .
+      #     dotnet-target: "net6.0"
+      #     output: _dist
       - uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error

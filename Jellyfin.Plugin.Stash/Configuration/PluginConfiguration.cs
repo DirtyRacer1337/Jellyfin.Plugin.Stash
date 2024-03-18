@@ -10,6 +10,7 @@ namespace Stash.Configuration
             this.StashAPIKey = string.Empty;
 
             this.AddDisambiguation = false;
+            this.UseFullPathToSearch = true;
         }
 
         public string StashEndpoint { get; set; }
@@ -17,5 +18,7 @@ namespace Stash.Configuration
         public string StashAPIKey { get; set; }
 
         public bool AddDisambiguation { get; set; }
+
+        public bool UseFullPathToSearch { get; set; }
     }
 }

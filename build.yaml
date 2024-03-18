@@ -10,7 +10,7 @@ description: |
   Review documentation at https://github.com/9p4/jellyfin-plugin-sso
 category: "Authentication"
 artifacts:
-  - "Jellyfin.Plugin.Stash.dll"
-  - "Jellyfin.Plugin.Stash.pdb"
+  - "Stash.dll"
+  - "Stash.pdb"
 changelog: |
   1.0.0.1: Initial Release

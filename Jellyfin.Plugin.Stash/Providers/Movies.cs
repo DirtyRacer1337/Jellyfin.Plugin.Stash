@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
-using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using Stash.Helpers;
 
 #if __EMBY__
 using MediaBrowser.Common.Net;
+using MediaBrowser.Model.Entities;
 #else
 using System.Net.Http;
+using Jellyfin.Data.Enums;
 #endif
 
 namespace Stash.Providers
@@ -108,7 +109,11 @@ namespace Stash.Providers
                 {
                     foreach (var actorLink in result.People)
                     {
+#if __EMBY__
                         actorLink.Type = PersonType.Actor;
+#else
+                        actorLink.Type = PersonKind.Actor;
+#endif
                     }
                 }
             }

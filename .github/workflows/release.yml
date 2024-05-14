@@ -12,20 +12,20 @@ jobs:
   jellyfin:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v2
 
       - name: Build app for release
         run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release
 
       - name: Rename Files
-        run: ren Jellyfin.Plugin.Stash/bin/Release/net6.0/Stash.dll Jellyfin.Plugin.Stash.dll && ren Jellyfin.Plugin.Stash/bin/Release/net6.0/Stash.pdb Jellyfin.Plugin.Stash.pdb
+        run: ren Jellyfin.Plugin.Stash/bin/Release/net8.0/Stash.dll Jellyfin.Plugin.Stash.dll && ren Jellyfin.Plugin.Stash/bin/Release/net8.0/Stash.pdb Jellyfin.Plugin.Stash.pdb
 
-      - uses: vimtor/action-zip@v1.1
+      - uses: vimtor/action-zip@v1.2
         with:
-          files: Jellyfin.Plugin.Stash/bin/Release/net6.0/Jellyfin.Plugin.Stash.pdb Jellyfin.Plugin.Stash/bin/Release/net6.0/Jellyfin.Plugin.Stash.dll
+          files: Jellyfin.Plugin.Stash/bin/Release/net8.0/Jellyfin.Plugin.Stash.pdb Jellyfin.Plugin.Stash/bin/Release/net8.0/Jellyfin.Plugin.Stash.dll
           dest: Jellyfin.Plugin.Stash.zip
 
       - uses: actions/upload-artifact@v3
@@ -37,10 +37,10 @@ jobs:
   emby:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v2
 
       - name: Build app for release
         run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release.Emby
@@ -48,7 +48,7 @@ jobs:
       - name: Rename Files
         run: ren Jellyfin.Plugin.Stash/bin/Release.Emby/netstandard2.1/Stash.dll ./Emby.Plugins.Stash.dll && ren Jellyfin.Plugin.Stash/bin/Release.Emby/netstandard2.1/Stash.pdb ./Emby.Plugins.Stash.pdb
 
-      - uses: vimtor/action-zip@v1.1
+      - uses: vimtor/action-zip@v1.2
         with:
           files: Jellyfin.Plugin.Stash/bin/Release.Emby/netstandard2.1/Emby.Plugins.Stash.pdb Jellyfin.Plugin.Stash/bin/Release.Emby/netstandard2.1/Emby.Plugins.Stash.dll
           dest: Emby.Plugins.Stash.zip

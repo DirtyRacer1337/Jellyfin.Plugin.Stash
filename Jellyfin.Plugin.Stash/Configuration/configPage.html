@@ -23,6 +23,15 @@
                             <span>Add Disambiguation to Performer Name</span>
                         </label>
                     </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="UseFullPathToSearch" name="UseFullPathToSearch" type="checkbox" is="emby-checkbox" />
+                            <span>
+                                Use Full Path of Media Items When Searching Them in Stash.
+                                If left unchecked, only the filename (without the extension) will be used when searching.
+                            </span>
+                        </label>
+                    </div>
                     <button is="emby-button" type="submit" class="raised button-submit block emby-button">
                         <span>Save</span>
                     </button>
@@ -40,6 +49,7 @@
                     $('#StashEndpoint').val(config.StashEndpoint).change();
                     $('#StashAPIKey').val(config.StashAPIKey).change();
                     $('#AddDisambiguation').prop('checked', config.AddDisambiguation);
+                    $('#UseFullPathToSearch').prop('checked', config.UseFullPathToSearch);
 
                     Dashboard.hideLoadingMsg();
                 });
@@ -51,6 +61,7 @@
                     config.StashEndpoint = $('#StashEndpoint').val();
                     config.StashAPIKey = $('#StashAPIKey').val();
                     config.AddDisambiguation = $('#AddDisambiguation').prop('checked');
+                    config.UseFullPathToSearch = $('#UseFullPathToSearch').prop('checked');
 
                     ApiClient.updatePluginConfiguration(pluginConfig.pluginUniqueId, config).then(function (result) {
                         Dashboard.processPluginConfigurationUpdateResult(result);

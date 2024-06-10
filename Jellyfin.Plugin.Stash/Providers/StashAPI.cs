@@ -177,10 +177,11 @@ namespace Stash.Providers
 
             foreach (var actorLink in sceneData.performers)
             {
+                var actorName = (Plugin.Instance.Configuration.AddDisambiguation && !string.IsNullOrEmpty(actorLink.disambiguation)) ? $"{actorLink.name} ({actorLink.disambiguation})" : actorLink.name;
                 var actor = new PersonInfo
                 {
                     ProviderIds = { { Plugin.Instance.Name, actorLink.id } },
-                    Name = actorLink.name,
+                    Name = actorName,
                     ImageUrl = actorLink.image_path,
                 };
 

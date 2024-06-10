@@ -109,10 +109,11 @@ namespace Stash.Providers
                 {
                     foreach (var actorLink in result.People)
                     {
-                        if (actorLink.Type == null)
-                        {
-                            actorLink.Type = PersonKind.Actor;
-                        }
+                        #if __EMBY__
+                        actorLink.Type = PersonType.Actor;
+#else
+                        actorLink.Type = PersonKind.Actor;
+#endif
                     }
                 }
             }

@@ -9,14 +9,19 @@ using System.Web;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
-using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Stash.Helpers;
 using Stash.Helpers.Utils;
 using Stash.Models;
+#if __EMBY__
+using MediaBrowser.Model.Entities;
+#else
+using MediaBrowser.Model.Entities;
 using Jellyfin.Data.Enums;
+#endif
+
 
 
 namespace Stash.Providers
@@ -171,7 +176,11 @@ namespace Stash.Providers
                 var director = new PersonInfo
                 {
                     Name = directorName,
+#if __EMBY__
+                    Type = PersonType.Director,
+#else
                     Type = PersonKind.Director,
+#endif              
                 };
 
                 result.AddPerson(director);

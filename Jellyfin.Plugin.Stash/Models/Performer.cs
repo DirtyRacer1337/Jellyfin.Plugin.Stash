@@ -12,5 +12,6 @@ namespace Stash.Models
         public List<string> alias_list;
         public DateTime? birthdate;
         public DateTime? death_date;
+        public string country;
     }
 }

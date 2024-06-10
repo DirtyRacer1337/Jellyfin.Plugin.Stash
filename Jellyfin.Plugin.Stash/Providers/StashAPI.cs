@@ -16,6 +16,8 @@ using Newtonsoft.Json.Linq;
 using Stash.Helpers;
 using Stash.Helpers.Utils;
 using Stash.Models;
+using Jellyfin.Data.Enums;
+
 
 namespace Stash.Providers
 {

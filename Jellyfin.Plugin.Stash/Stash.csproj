@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
-    <PackageReference Include="Jellyfin.Controller" Version="10.9.1" />
+    <PackageReference Include="Jellyfin.Controller" Version="10.*-*" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="SkiaSharp" Version="2.88.8" />
   </ItemGroup>

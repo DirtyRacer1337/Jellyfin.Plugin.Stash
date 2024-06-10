@@ -169,7 +169,7 @@ namespace Stash.Providers
                 var director = new PersonInfo
                 {
                     Name = directorName,
-                    Type = PersonType.Director,
+                    Type = PersonKind.Director,
                 };
 
                 result.AddPerson(director);

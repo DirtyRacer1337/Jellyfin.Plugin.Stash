@@ -18,11 +18,9 @@ using Stash.Models;
 #if __EMBY__
 using MediaBrowser.Model.Entities;
 #else
-using MediaBrowser.Model.Entities;
 using Jellyfin.Data.Enums;
+using MediaBrowser.Model.Entities;
 #endif
-
-
 
 namespace Stash.Providers
 {
@@ -180,7 +178,7 @@ namespace Stash.Providers
                     Type = PersonType.Director,
 #else
                     Type = PersonKind.Director,
-#endif              
+#endif
                 };
 
                 result.AddPerson(director);

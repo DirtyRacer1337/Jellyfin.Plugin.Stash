@@ -9,10 +9,10 @@ namespace Stash.Models
         public string title;
         public string details;
         public DateTime? date;
-        public Path paths;
+        public Paths paths;
         public List<Movies?> movies;
         public Studio? studio;
-        public List<Tag> tags;
+        public List<Tags> tags;
         public List<Performer> performers;
     }
 }

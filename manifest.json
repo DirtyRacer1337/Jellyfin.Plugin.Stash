@@ -1,27 +1,27 @@
 [
     {
         "category": "Metadata",
-        "guid": "af765402-cf54-4aa5-8fec-3ceb44fd8476",
+        "guid": "41b49e91-e974-4afb-8a2e-e8b3feee4a6b",
         "name": "Stash",
         "description": "",
-        "owner": "DirtyRacer",
+        "owner": "masterr2001",
         "overview": "",
         "versions": [
             {
-                "checksum": "68d04367c1d49880795c6de53c912e1e",
-                "changelog": "Added Support Jellyfin 10.9; Added Disambiguation Field to Performer Name; Minor Changes",
+                "checksum": "cd037a96ba8eed10951551517856b704",
+                "changelog": "Fixed Models",
                 "targetAbi": "10.9.0.0",
-                "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.Stash/releases/download/1.1.0.2/Jellyfin.Plugin.Stash.zip",
-                "timestamp": "2024-06-07 21:00:55",
-                "version": "1.1.0.2"
+                "sourceUrl": "https://github.com/masterr2001/Jellyfin.Plugin.Stash/releases/download/1.0.1/Jellyfin.Plugin.Stash.zip",
+                "timestamp": "2024-07-06 21:00:55",
+                "version": "1.0.1.0"
             },
             {
-                "checksum": "95cae6198346170ec56c025165962a56",
-                "changelog": "Initial release",
-                "targetAbi": "10.8.0.0",
-                "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.Stash/releases/download/1.0.0.1/Jellyfin.Plugin.Stash.zip",
-                "timestamp": "2023-04-05 15:38:50",
-                "version": "1.0.0.1"
+                "checksum": "9650d15af6a119de246b1285a8de30c7",
+                "changelog": "Added Support Jellyfin 10.9; Added Movie Handling",
+                "targetAbi": "10.9.0.0",
+                "sourceUrl": "https://github.com/masterr2001/Jellyfin.Plugin.Stash/releases/download/1.0/Jellyfin.Plugin.Stash.zip",
+                "timestamp": "2024-07-04 21:00:55",
+                "version": "1.0.0.0"
             }
         ]
     }

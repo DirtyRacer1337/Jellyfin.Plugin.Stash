@@ -9,13 +9,18 @@ using System.Web;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
-using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Stash.Helpers;
 using Stash.Helpers.Utils;
 using Stash.Models;
+#if __EMBY__
+using MediaBrowser.Model.Entities;
+#else
+using Jellyfin.Data.Enums;
+using MediaBrowser.Model.Entities;
+#endif
 
 namespace Stash.Providers
 {
@@ -71,7 +76,7 @@ namespace Stash.Providers
 
             if (!string.IsNullOrEmpty(path))
             {
-                query = Path.GetFileNameWithoutExtension(path);
+                query = System.IO.Path.GetFileNameWithoutExtension(path);
             }
 
             if (string.IsNullOrEmpty(query))
@@ -114,18 +119,18 @@ namespace Stash.Providers
                     ProviderIds = { { Plugin.Instance.Name, searchResult.id } },
                     Name = searchResult.title,
                     PremiereDate = searchResult.date,
-                    ImageUrl = searchResult.paths.screenshot,
+                    ImageUrl = await ImageHelper.GetImageSizeAndValidate(searchResult.movies.FirstOrDefault()?.movie.front_image_path, cancellationToken) ?? searchResult.paths.screenshot,
                 });
             }
 
             return result;
         }
 
-        public static async Task<MetadataResult<Movie>> SceneUpdate(string sceneID, CancellationToken cancellationToken)
+        public static async Task<MetadataResult<MediaBrowser.Controller.Entities.Movies.Movie>> SceneUpdate(string sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<MediaBrowser.Controller.Entities.Movies.Movie>()
             {
-                Item = new Movie(),
+                Item = new MediaBrowser.Controller.Entities.Movies.Movie(),
                 People = new List<PersonInfo>(),
             };
 
@@ -163,6 +168,22 @@ namespace Stash.Providers
                 result.Item.AddGenre(genreName);
             }
 
+            var directorName = sceneData.movies.FirstOrDefault()?.movie.director;
+            if (!string.IsNullOrEmpty(directorName))
+            {
+                var director = new PersonInfo
+                {
+                    Name = directorName,
+#if __EMBY__
+                    Type = PersonType.Director,
+#else
+                    Type = PersonKind.Director,
+#endif
+                };
+
+                result.AddPerson(director);
+            }
+
             foreach (var actorLink in sceneData.performers)
             {
                 var actorName = (Plugin.Instance.Configuration.AddDisambiguation && !string.IsNullOrEmpty(actorLink.disambiguation)) ? $"{actorLink.name} ({actorLink.disambiguation})" : actorLink.name;
@@ -184,7 +205,6 @@ namespace Stash.Providers
         public static async Task<IEnumerable<RemoteImageInfo>> SceneImages(string sceneID, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
-
             if (sceneID == null)
             {
                 return result;
@@ -204,7 +224,7 @@ namespace Stash.Providers
             result.Add(new RemoteImageInfo
             {
                 Type = ImageType.Primary,
-                Url = sceneData.paths.screenshot,
+                Url = await ImageHelper.GetImageSizeAndValidate(sceneData.movies.FirstOrDefault()?.movie.front_image_path, cancellationToken) ?? sceneData.paths.screenshot,
             });
 
             return result;
@@ -268,6 +288,16 @@ namespace Stash.Providers
 
             result.Item.PremiereDate = sceneData.birthdate;
             result.Item.EndDate = sceneData.death_date;
+            if (sceneData.country.Any())
+                {
+                    var bornPlaceList = new List<string>();
+                    var location = new RegionInfo(sceneData.country.Trim()).EnglishName;
+                    if (!string.IsNullOrEmpty(location))
+                        {
+                            bornPlaceList.Add(location);
+                            result.Item.ProductionLocations = new string[] { string.Join(", ", bornPlaceList) };
+                        }
+                }
 
             result.HasMetadata = true;
 

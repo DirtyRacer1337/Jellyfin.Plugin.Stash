@@ -8,6 +8,14 @@
         "overview": "",
         "versions": [
             {
+                "checksum": "cd037a96ba8eed10951551517856b704",
+                "changelog": "Fixed Models",
+                "targetAbi": "10.9.0.0",
+                "sourceUrl": "https://github.com/masterr2001/Jellyfin.Plugin.Stash/releases/download/1.0.1/Jellyfin.Plugin.Stash.zip",
+                "timestamp": "2024-07-06 21:00:55",
+                "version": "1.0.1.0"
+            },
+            {
                 "checksum": "9650d15af6a119de246b1285a8de30c7",
                 "changelog": "Added Support Jellyfin 10.9; Added Movie Handling",
                 "targetAbi": "10.9.0.0",

@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
-using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Plugins;
-using MediaBrowser.Model.Serialization;
 using Stash.Configuration;
 
 #if __EMBY__
-using System.IO;
+using MediaBrowser.Common;
 using MediaBrowser.Common.Net;
-using MediaBrowser.Model.Drawing;
 using MediaBrowser.Model.Logging;
+using MediaBrowser.Controller.Plugins;
 #else
+using MediaBrowser.Model.Serialization;
+using MediaBrowser.Common.Configuration;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
 #endif
@@ -21,15 +21,14 @@ using Microsoft.Extensions.Logging;
 namespace Stash
 {
 #if __EMBY__
-    public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
+    public class Plugin : BasePluginSimpleUI<PluginConfiguration>
     {
-        public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, IHttpClient http, ILogManager logger)
+        public Plugin(IApplicationHost applicationHost, IHttpClient http, ILogManager logger) : base(applicationHost)
 #else
     public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
     {
-        public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, IHttpClientFactory http, ILogger<Plugin> logger)
+        public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, IHttpClientFactory http, ILogger<Plugin> logger) : base(applicationPaths, xmlSerializer)
 #endif
-            : base(applicationPaths, xmlSerializer)
         {
             Instance = this;
             Http = http;
@@ -57,6 +56,11 @@ namespace Stash
         public override string Name => "Stash";
 
         public override Guid Id => Guid.Parse("57b8ef5d-8835-436d-9514-a709ee25faf2");
+
+#if __EMBY__
+        public PluginConfiguration Configuration => GetOptions();
+#else
+#endif
 
         public IEnumerable<PluginPageInfo> GetPages()
             => new[]

@@ -9,8 +9,6 @@ namespace Stash.Configuration
 #if __EMBY__
     public class PluginConfiguration : EditableOptionsBase
     {
-        public override string EditorTitle => Plugin.Instance.Name;
-
 #else
     public class PluginConfiguration : BasePluginConfiguration
     {
@@ -22,6 +20,10 @@ namespace Stash.Configuration
 
             this.AddDisambiguation = false;
         }
+
+#if __EMBY__
+        public override string EditorTitle => Plugin.Instance.Name;
+#endif
 
         public string StashEndpoint { get; set; }
 

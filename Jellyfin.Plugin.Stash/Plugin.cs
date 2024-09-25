@@ -7,12 +7,12 @@ using Stash.Configuration;
 #if __EMBY__
 using MediaBrowser.Common;
 using MediaBrowser.Common.Net;
-using MediaBrowser.Model.Logging;
 using MediaBrowser.Controller.Plugins;
+using MediaBrowser.Model.Logging;
 #else
-using MediaBrowser.Model.Serialization;
-using MediaBrowser.Common.Configuration;
 using System.Net.Http;
+using MediaBrowser.Common.Configuration;
+using MediaBrowser.Model.Serialization;
 using Microsoft.Extensions.Logging;
 #endif
 
@@ -23,11 +23,13 @@ namespace Stash
 #if __EMBY__
     public class Plugin : BasePluginSimpleUI<PluginConfiguration>
     {
-        public Plugin(IApplicationHost applicationHost, IHttpClient http, ILogManager logger) : base(applicationHost)
+        public Plugin(IApplicationHost applicationHost, IHttpClient http, ILogManager logger)
+            : base(applicationHost)
 #else
     public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
     {
-        public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, IHttpClientFactory http, ILogger<Plugin> logger) : base(applicationPaths, xmlSerializer)
+        public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, IHttpClientFactory http, ILogger<Plugin> logger)
+            : base(applicationPaths, xmlSerializer)
 #endif
         {
             Instance = this;
@@ -58,7 +60,7 @@ namespace Stash
         public override Guid Id => Guid.Parse("57b8ef5d-8835-436d-9514-a709ee25faf2");
 
 #if __EMBY__
-        public PluginConfiguration Configuration => GetOptions();
+        public PluginConfiguration Configuration => this.GetOptions();
 #else
 #endif
 

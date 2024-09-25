@@ -111,10 +111,10 @@ namespace Stash.Providers
             {
                 result.Add(new RemoteSearchResult
                 {
-                    ProviderIds = { { Plugin.Instance.Name, searchResult.id } },
-                    Name = searchResult.title,
-                    PremiereDate = searchResult.date,
-                    ImageUrl = searchResult.paths.screenshot,
+                    ProviderIds = { { Plugin.Instance.Name, searchResult.Id } },
+                    Name = searchResult.Title,
+                    PremiereDate = searchResult.Date,
+                    ImageUrl = searchResult.Paths.Screenshot,
                 });
             }
 
@@ -140,14 +140,14 @@ namespace Stash.Providers
             data = http["data"]["findScene"].ToString();
             var sceneData = JsonConvert.DeserializeObject<Scene>(data);
 
-            result.Item.Name = sceneData.title;
-            result.Item.Overview = sceneData.details;
-            result.Item.PremiereDate = sceneData.date;
+            result.Item.Name = sceneData.Title;
+            result.Item.Overview = sceneData.Details;
+            result.Item.PremiereDate = sceneData.Date;
 
-            var studioName = sceneData.studio?.name;
+            var studioName = sceneData.Studio?.Name;
             if (studioName != null)
             {
-                var parentStudio = sceneData.studio?.parent_studio?.name;
+                var parentStudio = sceneData.Studio?.ParentStudio?.Name;
                 if (parentStudio != null)
                 {
                     result.Item.AddStudio(parentStudio);
@@ -156,21 +156,21 @@ namespace Stash.Providers
                 result.Item.AddStudio(studioName);
             }
 
-            foreach (var genreLink in sceneData.tags)
+            foreach (var genreLink in sceneData.Tags)
             {
-                var genreName = genreLink.name;
+                var genreName = genreLink.Name;
 
                 result.Item.AddGenre(genreName);
             }
 
-            foreach (var actorLink in sceneData.performers)
+            foreach (var actorLink in sceneData.Performers)
             {
-                var actorName = (Plugin.Instance.Configuration.AddDisambiguation && !string.IsNullOrEmpty(actorLink.disambiguation)) ? $"{actorLink.name} ({actorLink.disambiguation})" : actorLink.name;
+                var actorName = (Plugin.Instance.Configuration.AddDisambiguation && !string.IsNullOrEmpty(actorLink.Disambiguation)) ? $"{actorLink.Name} ({actorLink.Disambiguation})" : actorLink.Name;
                 var actor = new PersonInfo
                 {
-                    ProviderIds = { { Plugin.Instance.Name, actorLink.id } },
+                    ProviderIds = { { Plugin.Instance.Name, actorLink.Id } },
                     Name = actorName,
-                    ImageUrl = actorLink.image_path,
+                    ImageUrl = actorLink.ImagePath,
                 };
 
                 result.People.Add(actor);
@@ -204,7 +204,7 @@ namespace Stash.Providers
             result.Add(new RemoteImageInfo
             {
                 Type = ImageType.Primary,
-                Url = sceneData.paths.screenshot,
+                Url = sceneData.Paths.Screenshot,
             });
 
             return result;
@@ -236,10 +236,10 @@ namespace Stash.Providers
             {
                 result.Add(new RemoteSearchResult
                 {
-                    ProviderIds = { { Plugin.Instance.Name, searchResult.id } },
-                    Name = searchResult.name,
-                    PremiereDate = searchResult.birthdate,
-                    ImageUrl = searchResult.image_path,
+                    ProviderIds = { { Plugin.Instance.Name, searchResult.Id } },
+                    Name = searchResult.Name,
+                    PremiereDate = searchResult.BirthDate,
+                    ImageUrl = searchResult.ImagePath,
                 });
             }
 
@@ -264,10 +264,10 @@ namespace Stash.Providers
             data = http["data"]["findPerformer"].ToString();
             var sceneData = JsonConvert.DeserializeObject<Performer>(data);
 
-            result.Item.OriginalTitle = string.Join(", ", sceneData.alias_list);
+            result.Item.OriginalTitle = string.Join(", ", sceneData.AliasList);
 
-            result.Item.PremiereDate = sceneData.birthdate;
-            result.Item.EndDate = sceneData.death_date;
+            result.Item.PremiereDate = sceneData.BirthDate;
+            result.Item.EndDate = sceneData.DeathDate;
 
             result.HasMetadata = true;
 
@@ -297,7 +297,7 @@ namespace Stash.Providers
             result.Add(new RemoteImageInfo
             {
                 Type = ImageType.Primary,
-                Url = sceneData.image_path,
+                Url = sceneData.ImagePath,
             });
 
             return result;
@@ -329,9 +329,9 @@ namespace Stash.Providers
             {
                 result.Add(new RemoteSearchResult
                 {
-                    ProviderIds = { { Plugin.Instance.Name, searchResult.id } },
-                    Name = searchResult.name,
-                    ImageUrl = searchResult.image_path,
+                    ProviderIds = { { Plugin.Instance.Name, searchResult.Id } },
+                    Name = searchResult.Name,
+                    ImageUrl = searchResult.ImagePath,
                 });
             }
 
@@ -386,7 +386,7 @@ namespace Stash.Providers
             result.Add(new RemoteImageInfo
             {
                 Type = ImageType.Logo,
-                Url = sceneData.image_path,
+                Url = sceneData.ImagePath,
             });
 
             return result;

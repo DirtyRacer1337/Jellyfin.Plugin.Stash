@@ -1,7 +1,10 @@
+using Newtonsoft.Json;
+
 namespace Stash.Models
 {
     public struct Paths
     {
-        public string screenshot;
+        [JsonProperty(PropertyName = "screenshot")]
+        public string Screenshot { get; set; }
     }
 }

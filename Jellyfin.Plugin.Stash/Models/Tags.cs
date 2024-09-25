@@ -1,7 +1,10 @@
+using Newtonsoft.Json;
+
 namespace Stash.Models
 {
     public struct Tags
     {
-        public string name;
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
     }
 }

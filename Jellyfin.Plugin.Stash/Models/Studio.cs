@@ -1,10 +1,19 @@
+using Newtonsoft.Json;
+
 namespace Stash.Models
 {
     public struct Studio
     {
-        public string id;
-        public string name;
-        public ParentStudio? parent_studio;
-        public string image_path;
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        [JsonProperty(PropertyName = "parent_studio")]
+        public ParentStudio? ParentStudio { get; set; }
+
+        [JsonProperty(PropertyName = "image_path")]
+        public string ImagePath { get; set; }
     }
 }

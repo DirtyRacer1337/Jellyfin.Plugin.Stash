@@ -71,7 +71,7 @@ namespace Stash.Providers
 
             if (!string.IsNullOrEmpty(path))
             {
-                query = Path.GetFileNameWithoutExtension(path);
+                query = path;
             }
 
             if (string.IsNullOrEmpty(query))
@@ -84,7 +84,16 @@ namespace Stash.Providers
             string searchData;
             if (!string.IsNullOrEmpty(path))
             {
-                searchData = string.Format("scene_filter:{{path:{{value:\"\\\"{0}\\\"\",modifier:INCLUDES}}}}", query);
+                if (Plugin.Instance.Configuration.UseFullPathToSearch)
+                {
+                    searchData = string.Format("path:{{value:\"{0}\",modifier:EQUALS}}", query);
+                }
+                else
+                {
+                    searchData = string.Format("path:{{value:\"\\\"{0}\\\"\",modifier:INCLUDES}}", query);
+                }
+
+                searchData = string.Format("scene_filter:{{{0}}}", searchData);
             }
             else
             {

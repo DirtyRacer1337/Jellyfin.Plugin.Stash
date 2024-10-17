@@ -69,11 +69,6 @@ namespace Stash.Providers
             var path = Plugin.Instance.Configuration.UseFilePath ? searchInfo.Path : string.Empty;
 #endif
 
-            if (!string.IsNullOrEmpty(path))
-            {
-                query = path;
-            }
-
             if (string.IsNullOrEmpty(query))
             {
                 return result;
@@ -86,11 +81,11 @@ namespace Stash.Providers
             {
                 if (Plugin.Instance.Configuration.UseFullPathToSearch)
                 {
-                    searchData = string.Format("path:{{value:\"{0}\",modifier:EQUALS}}", query);
+                    searchData = string.Format("path:{{value:\"{0}\",modifier:EQUALS}}", path);
                 }
                 else
                 {
-                    searchData = string.Format("path:{{value:\"\\\"{0}\\\"\",modifier:INCLUDES}}", query);
+                    searchData = string.Format("path:{{value:\"\\\"{0}\\\"\",modifier:INCLUDES}}", Path.GetFileNameWithoutExtension(path));
                 }
 
                 searchData = string.Format("scene_filter:{{{0}}}", searchData);

@@ -66,7 +66,7 @@ namespace Stash.Providers
 #if __EMBY__
             string path = string.Empty;
 #else
-            var path = searchInfo.Path;
+            var path = Plugin.Instance.Configuration.UseFilePath ? searchInfo.Path : string.Empty;
 #endif
 
             if (!string.IsNullOrEmpty(path))

@@ -18,6 +18,7 @@ namespace Stash.Configuration
             this.StashEndpoint = "http://localhost:9999";
             this.StashAPIKey = string.Empty;
 
+            this.UseFilePath = true;
             this.UseFullPathToSearch = true;
 
             this.AddDisambiguation = false;
@@ -30,6 +31,8 @@ namespace Stash.Configuration
         public string StashEndpoint { get; set; }
 
         public string StashAPIKey { get; set; }
+
+        public bool UseFilePath { get; set; }
 
         public bool UseFullPathToSearch { get; set; }
 

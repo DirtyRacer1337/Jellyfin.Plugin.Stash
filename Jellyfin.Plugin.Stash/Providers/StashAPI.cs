@@ -74,14 +74,12 @@ namespace Stash.Providers
                 return result;
             }
 
-            query = HttpUtility.JavaScriptStringEncode(query.Trim());
-
             string searchData;
             if (!string.IsNullOrEmpty(path))
             {
                 if (Plugin.Instance.Configuration.UseFullPathToSearch)
                 {
-                    searchData = string.Format("path:{{value:\"{0}\",modifier:EQUALS}}", path);
+                    searchData = string.Format("path:{{value:\"{0}\",modifier:EQUALS}}", HttpUtility.JavaScriptStringEncode(path));
                 }
                 else
                 {
@@ -92,7 +90,7 @@ namespace Stash.Providers
             }
             else
             {
-                searchData = string.Format("filter:{{q:\"{0}\"}}", query);
+                searchData = string.Format("filter:{{q:\"{0}\"}}", HttpUtility.JavaScriptStringEncode(query));
             }
 
             var data = string.Format(Consts.SceneSearchQuery, searchData);
@@ -149,10 +147,10 @@ namespace Stash.Providers
             result.Item.PremiereDate = sceneData.Date;
 
             var studioName = sceneData.Studio?.Name;
-            if (studioName != null)
+            if (!string.IsNullOrEmpty(studioName))
             {
                 var parentStudio = sceneData.Studio?.ParentStudio?.Name;
-                if (parentStudio != null)
+                if (!string.IsNullOrEmpty(parentStudio))
                 {
                     result.Item.AddStudio(parentStudio);
                 }

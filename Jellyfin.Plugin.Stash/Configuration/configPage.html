@@ -51,7 +51,7 @@
                 ApiClient.getPluginConfiguration(pluginConfig.pluginUniqueId).then(function (config) {
                     $('#StashEndpoint').val(config.StashEndpoint).change();
                     $('#StashAPIKey').val(config.StashAPIKey).change();
-                    $('#UseFilePath').prop('checked', config.UseFullPathToSearch);
+                    $('#UseFilePath').prop('checked', config.UseFilePath);
                     $('#UseFullPathToSearch').prop('checked', config.UseFullPathToSearch);
                     $('#AddDisambiguation').prop('checked', config.AddDisambiguation);
 
@@ -64,7 +64,7 @@
                 ApiClient.getPluginConfiguration(pluginConfig.pluginUniqueId).then(function (config) {
                     config.StashEndpoint = $('#StashEndpoint').val();
                     config.StashAPIKey = $('#StashAPIKey').val();
-                    config.UseFullPathToSearch = $('#UseFilePath').prop('checked');
+                    config.UseFilePath = $('#UseFilePath').prop('checked');
                     config.UseFullPathToSearch = $('#UseFullPathToSearch').prop('checked');
                     config.AddDisambiguation = $('#AddDisambiguation').prop('checked');
 

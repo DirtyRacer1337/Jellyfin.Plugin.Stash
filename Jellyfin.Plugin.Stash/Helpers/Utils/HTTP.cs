@@ -20,12 +20,17 @@ namespace Stash.Helpers.Utils
 
         private static CookieContainer CookieContainer { get; } = new CookieContainer();
 
-        private static HttpClientHandler HttpHandler { get; } = new HttpClientHandler()
+#if __EMBY__
+        private static StandardSocketsHttpHandler SocketsHttpHandler { get; } = new StandardSocketsHttpHandler()
+#else
+        private static SocketsHttpHandler SocketsHttpHandler { get; } = new SocketsHttpHandler()
+#endif
         {
             CookieContainer = CookieContainer,
+            PooledConnectionLifetime = TimeSpan.FromSeconds(300),
         };
 
-        private static HttpClient Http { get; } = new HttpClient();
+        private static HttpClient Http { get; } = new HttpClient(SocketsHttpHandler);
 
         public static async Task<HTTPResponse> Request(string url, HttpMethod method, HttpContent param, IDictionary<string, string> headers, IDictionary<string, string> cookies, CancellationToken cancellationToken)
         {

@@ -207,6 +207,12 @@ namespace Stash.Providers
                 Url = sceneData.Paths.Screenshot,
             });
 
+            result.Add(new RemoteImageInfo
+            {
+                Type = ImageType.Backdrop,
+                Url = sceneData.Paths.Screenshot,
+            });
+
             return result;
         }
 

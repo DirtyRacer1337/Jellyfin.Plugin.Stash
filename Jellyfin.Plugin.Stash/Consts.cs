@@ -4,7 +4,7 @@ namespace Stash
     {
         public const string SceneSearchQuery = @"query{{findScenes({0}){{scenes{{id,title,date,paths{{screenshot}}}}}}}}";
 
-        public const string SceneQuery = @"query{{findScene(id:{0}){{id,title,details,date,paths{{screenshot}}studio{{name,parent_studio{{name}}}}tags{{name}}performers{{id,name,disambiguation,image_path}}}}}}";
+        public const string SceneQuery = @"query{{findScene(id:{0}){{id,title,details,date,paths{{screenshot}}studio{{name,parent_studio{{name,image_path}},image_path}}tags{{name}}performers{{id,name,disambiguation,image_path}}}}}}";
 
         public const string PerformerSearchQuery = @"query{{findPerformers({0}){{performers{{id,name,disambiguation,image_path,birthdate}}}}}}";
 

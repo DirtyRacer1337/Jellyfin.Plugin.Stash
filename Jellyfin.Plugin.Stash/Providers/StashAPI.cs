@@ -213,6 +213,24 @@ namespace Stash.Providers
                 Url = sceneData.Paths.Screenshot,
             });
 
+            if (sceneData.Studio.HasValue)
+            {
+                result.Add(new RemoteImageInfo
+                {
+                    Type = ImageType.Logo,
+                    Url = sceneData.Studio.Value.ImagePath,
+                });
+
+                if (sceneData.Studio.Value.ParentStudio.HasValue)
+                {
+                    result.Add(new RemoteImageInfo
+                    {
+                        Type = ImageType.Logo,
+                        Url = sceneData.Studio.Value.ParentStudio.Value.ImagePath,
+                    });
+                }
+            }
+
             return result;
         }
 

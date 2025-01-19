@@ -29,6 +29,8 @@ namespace Stash.Providers
             => new List<ImageType>
             {
                 ImageType.Primary,
+                ImageType.Backdrop,
+                ImageType.Logo,
             };
 
 #if __EMBY__

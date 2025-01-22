@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Plugins;
+using Newtonsoft.Json;
 using Stash.Configuration;
 
 #if __EMBY__
@@ -12,6 +12,7 @@ using MediaBrowser.Model.Logging;
 #else
 using System.Net.Http;
 using MediaBrowser.Common.Configuration;
+using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Serialization;
 using Microsoft.Extensions.Logging;
 #endif
@@ -43,6 +44,8 @@ namespace Stash
 #else
             Log = logger;
 #endif
+
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings { MaxDepth = 128 };
         }
 
 #if __EMBY__

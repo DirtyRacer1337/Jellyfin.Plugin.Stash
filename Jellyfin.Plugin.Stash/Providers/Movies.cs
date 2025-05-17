@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
+using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using Stash.Helpers;
 
 #if __EMBY__
 using MediaBrowser.Common.Net;
-using MediaBrowser.Model.Entities;
 #else
 using System.Net.Http;
 using Jellyfin.Data.Enums;
@@ -30,6 +30,50 @@ namespace Stash.Providers
             if (searchInfo == null)
             {
                 return result;
+            }
+
+            searchInfo.ProviderIds.TryGetValue(Plugin.Instance.Name, out var curID);
+            if (!string.IsNullOrEmpty(curID))
+            {
+                var sceneData = new MetadataResult<Movie>()
+                {
+                    HasMetadata = false,
+                    Item = new Movie(),
+                    People = new List<PersonInfo>(),
+                };
+
+                var sceneImages = new List<RemoteImageInfo>();
+
+                try
+                {
+                    sceneData = await StashAPI.SceneUpdate(curID, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"Update error: \"{e}\"");
+                }
+
+                try
+                {
+                    sceneImages = (List<RemoteImageInfo>)await StashAPI.SceneImages(curID, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"GetImages error: \"{e}\"");
+                }
+
+                if (sceneData.HasMetadata)
+                {
+                    result.Add(new RemoteSearchResult
+                    {
+                        ProviderIds = { { Plugin.Instance.Name, curID } },
+                        Name = sceneData.Item.Name,
+                        ImageUrl = sceneImages?.Where(o => o.Type == ImageType.Primary).FirstOrDefault()?.Url,
+                        PremiereDate = sceneData.Item.PremiereDate,
+                    });
+
+                    return result;
+                }
             }
 
             try

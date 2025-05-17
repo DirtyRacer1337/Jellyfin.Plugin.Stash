@@ -8,7 +8,7 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Model.Providers;
 #endif
 
-namespace Stash
+namespace Stash.ExternalIds
 {
     public class Collections : IExternalId
     {

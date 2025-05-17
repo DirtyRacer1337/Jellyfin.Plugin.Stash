@@ -85,7 +85,7 @@ namespace Stash.Providers
                 Logger.Error($"Search error: \"{e}\"");
             }
 
-            if (result.Any())
+            if (result.Count != 0)
             {
                 foreach (var scene in result)
                 {
@@ -149,7 +149,7 @@ namespace Stash.Providers
                     result.Item.ProductionYear = result.Item.PremiereDate.Value.Year;
                 }
 
-                if (result.People.Any())
+                if (result.People.Count != 0)
                 {
                     foreach (var actorLink in result.People)
                     {

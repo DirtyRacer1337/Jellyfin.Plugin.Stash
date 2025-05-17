@@ -7,7 +7,7 @@ using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 #endif
 
-namespace Stash
+namespace Stash.ExternalIds
 {
     public class Peoples : IExternalId
     {

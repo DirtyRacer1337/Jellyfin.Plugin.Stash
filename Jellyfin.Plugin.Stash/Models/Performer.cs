@@ -12,6 +12,9 @@ namespace Stash.Models
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
+        [JsonProperty(PropertyName = "details")]
+        public string Details { get; set; }
+
         [JsonProperty(PropertyName = "disambiguation")]
         public string Disambiguation { get; set; }
 
@@ -26,5 +29,11 @@ namespace Stash.Models
 
         [JsonProperty(PropertyName = "death_date")]
         public DateTime? DeathDate { get; set; }
+
+        [JsonProperty(PropertyName = "tags")]
+        public List<Tags> Tags { get; set; }
+
+        [JsonProperty(PropertyName = "country")]
+        public string Country { get; set; }
     }
 }

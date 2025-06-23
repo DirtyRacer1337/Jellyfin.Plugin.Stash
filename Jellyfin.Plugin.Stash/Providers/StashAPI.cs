@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -156,11 +158,11 @@ namespace Stash.Providers
                 result.Item.AddStudio(studioName);
             }
 
-            foreach (var genreLink in sceneData.Tags)
+            foreach (var tag in sceneData.Tags)
             {
-                var genreName = genreLink.Name;
+                var tagName = tag.Name;
 
-                result.Item.AddGenre(genreName);
+                result.Item.AddTag(tagName);
             }
 
             foreach (var actorLink in sceneData.Performers)
@@ -289,9 +291,21 @@ namespace Stash.Providers
             var sceneData = JsonConvert.DeserializeObject<Performer>(data);
 
             result.Item.OriginalTitle = string.Join(", ", sceneData.AliasList);
-
+            result.Item.Overview = sceneData.Details;
             result.Item.PremiereDate = sceneData.BirthDate;
             result.Item.EndDate = sceneData.DeathDate;
+
+            if (sceneData.Country.Any())
+            {
+                result.Item.ProductionLocations = new string[] { new RegionInfo(sceneData.Country.Trim()).EnglishName };
+            }
+
+            foreach (var tag in sceneData.Tags)
+            {
+                var tagName = tag.Name;
+
+                result.Item.AddTag(tagName);
+            }
 
             result.HasMetadata = true;
 

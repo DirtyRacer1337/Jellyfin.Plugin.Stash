@@ -35,6 +35,14 @@
                             <span>Add Disambiguation to Performer Name</span>
                         </label>
                     </div>
+                    <div class="selectContainer">
+                        <label class="selectLabel" for="TagStyle">Tag Style</label>
+                        <select is="emby-select" id="TagStyle" name="TagStyle" class="emby-select-withcolor emby-select">
+                            <option value="Genre">Genre</option>
+                            <option value="Tag">Tag</option>
+                            <option value="Disabled">Disabled</option>
+                        </select>
+                    </div>
                     <button is="emby-button" type="submit" class="raised button-submit block emby-button">
                         <span>Save</span>
                     </button>
@@ -54,6 +62,7 @@
                     $('#UseFilePath').prop('checked', config.UseFilePath);
                     $('#UseFullPathToSearch').prop('checked', config.UseFullPathToSearch);
                     $('#AddDisambiguation').prop('checked', config.AddDisambiguation);
+                    $('#TagStyle').val(config.TagStyle).change();
 
                     Dashboard.hideLoadingMsg();
                 });
@@ -67,6 +76,7 @@
                     config.UseFilePath = $('#UseFilePath').prop('checked');
                     config.UseFullPathToSearch = $('#UseFullPathToSearch').prop('checked');
                     config.AddDisambiguation = $('#AddDisambiguation').prop('checked');
+                    config.TagStyle = $('#TagStyle').val();
 
                     ApiClient.updatePluginConfiguration(pluginConfig.pluginUniqueId, config).then(function (result) {
                         Dashboard.processPluginConfigurationUpdateResult(result);
@@ -78,3 +88,4 @@
     </div>
 </body>
 </html>
+

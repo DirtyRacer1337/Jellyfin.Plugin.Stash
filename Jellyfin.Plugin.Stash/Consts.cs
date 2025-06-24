@@ -8,7 +8,7 @@ namespace Stash
 
         public const string PerformerSearchQuery = @"query{{findPerformers({0}){{performers{{id,name,disambiguation,image_path,birthdate}}}}}}";
 
-        public const string PerformerQuery = @"query{{findPerformer(id:{0}){{id,name,disambiguation,image_path,alias_list,birthdate,death_date}}}}";
+        public const string PerformerQuery = @"query{{findPerformer(id:{0}){{id,name,details,disambiguation,image_path,alias_list,birthdate,death_date,country,tags{{name}}}}}}";
 
         public const string StudiosSearchQuery = @"query{{findStudios({0}){{studios{{id,name,image_path}}}}}}";
 

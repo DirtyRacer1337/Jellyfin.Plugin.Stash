@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -11,6 +13,7 @@ using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Stash.Configuration;
 using Stash.Helpers;
 using Stash.Helpers.Utils;
 using Stash.Models;
@@ -289,9 +292,21 @@ namespace Stash.Providers
             var sceneData = JsonConvert.DeserializeObject<Performer>(data);
 
             result.Item.OriginalTitle = string.Join(", ", sceneData.AliasList);
-
+            result.Item.Overview = sceneData.Details;
             result.Item.PremiereDate = sceneData.BirthDate;
             result.Item.EndDate = sceneData.DeathDate;
+
+            if (!string.IsNullOrEmpty(sceneData.Country))
+            {
+                result.Item.ProductionLocations = new string[] { new RegionInfo(sceneData.Country).EnglishName };
+            }
+
+            foreach (var genreLink in sceneData.Tags)
+            {
+                var genreName = genreLink.Name;
+
+                result.Item.AddGenre(genreName);
+            }
 
             result.HasMetadata = true;
 

@@ -296,9 +296,9 @@ namespace Stash.Providers
             result.Item.PremiereDate = sceneData.BirthDate;
             result.Item.EndDate = sceneData.DeathDate;
 
-            if (sceneData.Country.Length != 0)
+            if (!string.IsNullOrEmpty(sceneData.Country))
             {
-                result.Item.ProductionLocations = new string[] { new RegionInfo(sceneData.Country.Trim()).EnglishName };
+                result.Item.ProductionLocations = new string[] { new RegionInfo(sceneData.Country).EnglishName };
             }
 
             foreach (var genreLink in sceneData.Tags)

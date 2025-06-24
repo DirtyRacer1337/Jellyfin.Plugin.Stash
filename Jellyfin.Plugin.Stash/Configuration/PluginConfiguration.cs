@@ -6,6 +6,13 @@ using MediaBrowser.Model.Plugins;
 
 namespace Stash.Configuration
 {
+    public enum TagStyle
+    {
+        Genre = 0,
+        Tag = 1,
+        Disabled = 2,
+    }
+
 #if __EMBY__
     public class PluginConfiguration : EditableOptionsBase
     {
@@ -22,7 +29,8 @@ namespace Stash.Configuration
             this.UseFullPathToSearch = true;
 
             this.AddDisambiguation = false;
-            this.UseTags = false;
+
+            this.TagStyle = TagStyle.Genre;
         }
 
 #if __EMBY__
@@ -39,6 +47,6 @@ namespace Stash.Configuration
 
         public bool AddDisambiguation { get; set; }
 
-        public bool UseTags { get; set; }
+        public TagStyle TagStyle { get; set; }
     }
 }

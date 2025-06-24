@@ -8,6 +8,7 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
+using Stash.Configuration;
 using Stash.Helpers;
 
 #if __EMBY__
@@ -147,6 +148,23 @@ namespace Stash.Providers
                 if (result.Item.PremiereDate.HasValue)
                 {
                     result.Item.ProductionYear = result.Item.PremiereDate.Value.Year;
+                }
+
+                var tags = result.Item.Genres;
+                switch (Plugin.Instance.Configuration.TagStyle)
+                {
+                    case TagStyle.Disabled:
+                        result.Item.Genres = Array.Empty<string>();
+                        result.Item.Tags = Array.Empty<string>();
+                        break;
+                    case TagStyle.Genre:
+                        result.Item.Genres = tags.ToArray();
+                        result.Item.Tags = Array.Empty<string>();
+                        break;
+                    case TagStyle.Tag:
+                        result.Item.Genres = Array.Empty<string>();
+                        result.Item.Tags = tags.ToArray();
+                        break;
                 }
 
                 if (result.People.Count != 0)

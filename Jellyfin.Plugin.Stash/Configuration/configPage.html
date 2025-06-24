@@ -1,90 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Stash</title>
+    <title>Stash</title>
 </head>
 <body>
-<div id="ConfigurationPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-button">
-    <div data-role="content">
-        <div class="content-primary">
-            <h1>Stash</h1>
-            <form id="ConfigForm">
-                <div class="inputContainer">
-                    <label class="inputeLabel inputLabelUnfocused" for="StashEndpoint">Stash Endpoint</label>
-                    <input id="StashEndpoint" name="StashEndpoint" type="text" is="emby-input" />
-                </div>
-                <div class="inputContainer">
-                    <label class="inputeLabel inputLabelUnfocused" for="StashAPIKey">Stash API Key</label>
-                    <input id="StashAPIKey" name="StashAPIKey" type="password" is="emby-input" />
-                </div>
-                <div class="checkboxContainer checkboxContainer-withDescripton">
-                    <label class="emby-checkbox-label">
-                        <input id="UseFilePath" name="UseFilePath" type="checkbox" is="emby-checkbox" />
-                        <span>Use FilePath for matching</span>
-                    </label>
-                </div>
-                <div class="checkboxContainer checkboxContainer-withDescripton">
-                    <label class="emby-checkbox-label">
-                        <input id="UseFullPathToSearch" name="UseFullPathToSearch" type="checkbox" is="emby-checkbox" />
-                        <span>Use Full Path of Media Items When Searching Them in Stash</span>
-                    </label>
-                </div>
-                <div class="checkboxContainer checkboxContainer-withDescripton">
-                    <label class="emby-checkbox-label">
-                        <input id="AddDisambiguation" name="AddDisambiguation" type="checkbox" is="emby-checkbox" />
-                        <span>Add Disambiguation to Performer Name</span>
-                    </label>
-                </div>
-                <div class="selectContainer">
-                    <label class="selectLabel" for="TagStyle">Tag Style</label>
-                    <select is="emby-select" id="TagStyle" name="TagStyle" class="emby-select-withcolor emby-select">
-                        <option value="Genre">Genre</option>
-                        <option value="Tag">Tag</option>
-                        <option value="Disabled">Disabled</option>
-                    </select>
-                </div>
-                <button is="emby-button" type="submit" class="raised button-submit block emby-button">
-                    <span>Save</span>
-                </button>
-            </form>
+    <div id="ConfigurationPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-button">
+        <div data-role="content">
+            <div class="content-primary">
+                <h1>Stash</h1>
+                <form id="ConfigForm">
+                    <div class="inputContainer">
+                        <label class="inputeLabel inputLabelUnfocused" for="StashEndpoint">Stash Endpoint</label>
+                        <input id="StashEndpoint" name="StashEndpoint" type="text" is="emby-input" />
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputeLabel inputLabelUnfocused" for="StashAPIKey">Stash API Key</label>
+                        <input id="StashAPIKey" name="StashAPIKey" type="password" is="emby-input" />
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="UseFilePath" name="UseFilePath" type="checkbox" is="emby-checkbox" />
+                            <span>Use FilePath for matching</span>
+                        </label>
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="UseFullPathToSearch" name="UseFullPathToSearch" type="checkbox" is="emby-checkbox" />
+                            <span>Use Full Path of Media Items When Searching Them in Stash</span>
+                        </label>
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="AddDisambiguation" name="AddDisambiguation" type="checkbox" is="emby-checkbox" />
+                            <span>Add Disambiguation to Performer Name</span>
+                        </label>
+                    </div>
+                    <div class="selectContainer">
+                        <label class="selectLabel" for="TagStyle">Tag Style</label>
+                        <select is="emby-select" id="TagStyle" name="TagStyle" class="emby-select-withcolor emby-select">
+                            <option value="Genre">Genre</option>
+                            <option value="Tag">Tag</option>
+                            <option value="Disabled">Disabled</option>
+                        </select>
+                    </div>
+                    <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                        <span>Save</span>
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
-    <script type="text/javascript">
-        var pluginConfig = {
-            pluginUniqueId: "57b8ef5d-8835-436d-9514-a709ee25faf2",
-        };
+        <script type="text/javascript">
+            var pluginConfig = {
+                pluginUniqueId: '57b8ef5d-8835-436d-9514-a709ee25faf2'
+            };
 
-        $("#ConfigurationPage").on("pageshow", function () {
-            Dashboard.showLoadingMsg();
-            ApiClient.getPluginConfiguration(pluginConfig.pluginUniqueId).then(function (config) {
-                $("#StashEndpoint").val(config.StashEndpoint).change();
-                $("#StashAPIKey").val(config.StashAPIKey).change();
-                $("#UseFilePath").prop("checked", config.UseFilePath);
-                $("#UseFullPathToSearch").prop("checked", config.UseFullPathToSearch);
-                $("#AddDisambiguation").prop("checked", config.AddDisambiguation);
-                $('#TagStyle').val(config.TagStyle).change();
+            $('#ConfigurationPage').on('pageshow', function () {
+                Dashboard.showLoadingMsg();
+                ApiClient.getPluginConfiguration(pluginConfig.pluginUniqueId).then(function (config) {
+                    $('#StashEndpoint').val(config.StashEndpoint).change();
+                    $('#StashAPIKey').val(config.StashAPIKey).change();
+                    $('#UseFilePath').prop('checked', config.UseFilePath);
+                    $('#UseFullPathToSearch').prop('checked', config.UseFullPathToSearch);
+                    $('#AddDisambiguation').prop('checked', config.AddDisambiguation);
+                    $('#TagStyle').val(config.TagStyle).change();
 
-                Dashboard.hideLoadingMsg();
-            });
-        });
-
-        $("#ConfigurationPage").on("submit", function () {
-            Dashboard.showLoadingMsg();
-            ApiClient.getPluginConfiguration(pluginConfig.pluginUniqueId).then(function (config) {
-                config.StashEndpoint = $("#StashEndpoint").val();
-                config.StashAPIKey = $("#StashAPIKey").val();
-                config.UseFilePath = $("#UseFilePath").prop("checked");
-                config.UseFullPathToSearch = $("#UseFullPathToSearch").prop("checked");
-                config.AddDisambiguation = $("#AddDisambiguation").prop("checked");
-                config.TagStyle = $('#TagStyle').val();
-
-                ApiClient.updatePluginConfiguration(pluginConfig.pluginUniqueId, config).then(function (result) {
-                    Dashboard.processPluginConfigurationUpdateResult(result);
+                    Dashboard.hideLoadingMsg();
                 });
             });
-            return false;
-        });
-    </script>
-</div>
+
+            $('#ConfigurationPage').on('submit', function () {
+                Dashboard.showLoadingMsg();
+                ApiClient.getPluginConfiguration(pluginConfig.pluginUniqueId).then(function (config) {
+                    config.StashEndpoint = $('#StashEndpoint').val();
+                    config.StashAPIKey = $('#StashAPIKey').val();
+                    config.UseFilePath = $('#UseFilePath').prop('checked');
+                    config.UseFullPathToSearch = $('#UseFullPathToSearch').prop('checked');
+                    config.AddDisambiguation = $('#AddDisambiguation').prop('checked');
+                    config.TagStyle = $('#TagStyle').val();
+
+                    ApiClient.updatePluginConfiguration(pluginConfig.pluginUniqueId, config).then(function (result) {
+                        Dashboard.processPluginConfigurationUpdateResult(result);
+                    });
+                });
+                return false;
+            });
+        </script>
+    </div>
 </body>
 </html>
+

@@ -22,6 +22,7 @@ namespace Stash.Configuration
             this.UseFullPathToSearch = true;
 
             this.AddDisambiguation = false;
+            this.UseTags = false;
         }
 
 #if __EMBY__
@@ -37,5 +38,7 @@ namespace Stash.Configuration
         public bool UseFullPathToSearch { get; set; }
 
         public bool AddDisambiguation { get; set; }
+
+        public bool UseTags { get; set; }
     }
 }

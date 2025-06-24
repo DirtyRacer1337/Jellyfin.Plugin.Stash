@@ -141,6 +141,7 @@ namespace Stash.Providers
 
             data = http["data"]["findScene"].ToString();
             var sceneData = JsonConvert.DeserializeObject<Scene>(data);
+            bool useTags = Plugin.Instance.Configuration.UseTags;
 
             result.Item.Name = sceneData.Title;
             result.Item.Overview = sceneData.Details;
@@ -158,11 +159,18 @@ namespace Stash.Providers
                 result.Item.AddStudio(studioName);
             }
 
-            foreach (var tag in sceneData.Tags)
+            foreach (var genreLink in sceneData.Tags)
             {
-                var tagName = tag.Name;
+                var genreName = genreLink.Name;
 
-                result.Item.AddTag(tagName);
+                if (useTags)
+                {
+                    result.Item.AddTag(genreName);
+                }
+                else
+                {
+                    result.Item.AddGenre(genreName);
+                }
             }
 
             foreach (var actorLink in sceneData.Performers)
@@ -289,6 +297,7 @@ namespace Stash.Providers
 
             data = http["data"]["findPerformer"].ToString();
             var sceneData = JsonConvert.DeserializeObject<Performer>(data);
+            bool useTags = Plugin.Instance.Configuration.UseTags;
 
             result.Item.OriginalTitle = string.Join(", ", sceneData.AliasList);
             result.Item.Overview = sceneData.Details;
@@ -300,11 +309,18 @@ namespace Stash.Providers
                 result.Item.ProductionLocations = new string[] { new RegionInfo(sceneData.Country.Trim()).EnglishName };
             }
 
-            foreach (var tag in sceneData.Tags)
+            foreach (var genreLink in sceneData.Tags)
             {
-                var tagName = tag.Name;
+                var genreName = genreLink.Name;
 
-                result.Item.AddTag(tagName);
+                if (useTags)
+                {
+                    result.Item.AddTag(genreName);
+                }
+                else
+                {
+                    result.Item.AddGenre(genreName);
+                }
             }
 
             result.HasMetadata = true;

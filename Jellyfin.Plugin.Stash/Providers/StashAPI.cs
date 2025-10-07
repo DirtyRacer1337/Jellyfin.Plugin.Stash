@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -13,7 +12,6 @@ using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Stash.Configuration;
 using Stash.Helpers;
 using Stash.Helpers.Utils;
 using Stash.Models;
@@ -64,11 +62,7 @@ namespace Stash.Providers
             var result = new List<RemoteSearchResult>();
 
             var query = searchInfo.Name;
-#if __EMBY__
-            string path = string.Empty;
-#else
             var path = Plugin.Instance.Configuration.UseFilePath ? searchInfo.Path : string.Empty;
-#endif
 
             if (string.IsNullOrEmpty(query))
             {

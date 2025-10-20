@@ -7,10 +7,36 @@ on:
     paths:
       - Jellyfin.Plugin.Stash/**
       - .github/**
+  pull_request:
+    branches: 
+      -main
 
 jobs:
+  debug-jellyfin:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build app for debug
+        run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Debug
+  debug-emby:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build app for release
+        run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Debug.Emby
   jellyfin:
     runs-on: windows-latest
+    needs: [debug-jellyfin]
     steps:
       - uses: actions/checkout@v4
 
@@ -21,11 +47,11 @@ jobs:
         run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release
 
       - name: Rename Files
-        run: ren Jellyfin.Plugin.Stash/bin/Release/net8.0/Stash.dll Jellyfin.Plugin.Stash.dll && ren Jellyfin.Plugin.Stash/bin/Release/net8.0/Stash.pdb Jellyfin.Plugin.Stash.pdb
+        run: ren Jellyfin.Plugin.Stash/bin/Release/net9.0/Stash.dll Jellyfin.Plugin.Stash.dll && ren Jellyfin.Plugin.Stash/bin/Release/net9.0/Stash.pdb Jellyfin.Plugin.Stash.pdb
 
       - uses: vimtor/action-zip@v1.2
         with:
-          files: Jellyfin.Plugin.Stash/bin/Release/net8.0/Jellyfin.Plugin.Stash.pdb Jellyfin.Plugin.Stash/bin/Release/net8.0/Jellyfin.Plugin.Stash.dll
+          files: Jellyfin.Plugin.Stash/bin/Release/net9.0/Jellyfin.Plugin.Stash.pdb Jellyfin.Plugin.Stash/bin/Release/net9.0/Jellyfin.Plugin.Stash.dll
           dest: Jellyfin.Plugin.Stash.zip
 
       - uses: actions/upload-artifact@v4
@@ -36,6 +62,7 @@ jobs:
           path: Jellyfin.Plugin.Stash.zip
   emby:
     runs-on: windows-latest
+    needs: [debug-emby]
     steps:
       - uses: actions/checkout@v4
 
@@ -61,6 +88,7 @@ jobs:
           path: Emby.Plugins.Stash.zip
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main'}}
     needs: [jellyfin, emby]
     steps:
       - name: Download all artifacts

@@ -170,7 +170,7 @@ namespace Stash.Providers
                     ImageUrl = actorLink.ImagePath,
                 };
 
-                result.People.Add(actor);
+                result.AddPerson(actor);
             }
 
             result.HasMetadata = true;

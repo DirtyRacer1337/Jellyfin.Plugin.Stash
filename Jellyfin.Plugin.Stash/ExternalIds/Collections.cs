@@ -22,7 +22,9 @@ namespace Stash.ExternalIds
 
         public string Key => Plugin.Instance.Name;
 
+#if __EMBY__
         public string UrlFormatString => Plugin.Instance.Configuration.StashEndpoint + "/studios/{0}";
+#endif
 
         public bool Supports(IHasProviderIds item) => item is BoxSet;
     }

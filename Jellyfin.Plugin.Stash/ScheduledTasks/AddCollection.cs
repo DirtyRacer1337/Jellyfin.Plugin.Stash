@@ -5,12 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Collections;
 using MediaBrowser.Controller.Entities;
+using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Tasks;
 
 #if __EMBY__
 #else
-using MediaBrowser.Controller.Entities.Movies;
+using Jellyfin.Data.Enums;
 #endif
 
 namespace Stash.ScheduledTasks
@@ -44,7 +45,14 @@ namespace Stash.ScheduledTasks
             await Task.Yield();
             progress?.Report(0);
 
-            var items = this.libraryManager.GetItemList(new InternalItemsQuery()).Where(o => o.ProviderIds.ContainsKey(Plugin.Instance.Name));
+            var items = this.libraryManager.GetItemList(new InternalItemsQuery()
+            {
+#if __EMBY__
+                IncludeItemTypes = new[] { nameof(Movie) },
+#else
+                IncludeItemTypes = [BaseItemKind.Movie],
+#endif
+            }).Where(o => o.ProviderIds.ContainsKey(Plugin.Instance.Name));
 
             var studios = items.SelectMany(o => o.Studios).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
             foreach (var (idx, studio) in studios.WithIndex())

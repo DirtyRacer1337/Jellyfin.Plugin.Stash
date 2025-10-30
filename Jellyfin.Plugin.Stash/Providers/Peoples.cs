@@ -17,7 +17,11 @@ using System.Net.Http;
 
 namespace Stash.Providers
 {
+#if __EMBY__
+    public class Peoples : IRemoteMetadataProvider<Person, PersonLookupInfo>, IHasSupportedExternalIdentifiers
+#else
     public class Peoples : IRemoteMetadataProvider<Person, PersonLookupInfo>
+#endif
     {
         public string Name => Plugin.Instance.Name;
 
@@ -115,5 +119,12 @@ namespace Stash.Providers
         {
             return UGetImageResponse.SendAsync(url, cancellationToken);
         }
+
+#if __EMBY__
+        public string[] GetSupportedExternalIdentifiers()
+        {
+            return new[] { Plugin.Instance.Name };
+        }
+#endif
     }
 }

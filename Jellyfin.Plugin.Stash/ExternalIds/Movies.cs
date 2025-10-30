@@ -9,7 +9,11 @@ using MediaBrowser.Model.Providers;
 
 namespace Stash.ExternalIds
 {
+#if __EMBY__
+    public class Movies : IExternalId, IHasWebsite
+#else
     public class Movies : IExternalId
+#endif
     {
 #if __EMBY__
         public string Name => Plugin.Instance.Name;
@@ -23,6 +27,8 @@ namespace Stash.ExternalIds
 
 #if __EMBY__
         public string UrlFormatString => Plugin.Instance.Configuration.StashEndpoint + "/scenes/{0}";
+
+        public string Website => Plugin.Instance.Configuration.StashEndpoint;
 #endif
 
         public bool Supports(IHasProviderIds item) => item is Movie;

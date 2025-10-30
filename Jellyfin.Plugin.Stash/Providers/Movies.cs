@@ -20,7 +20,11 @@ using Jellyfin.Data.Enums;
 
 namespace Stash.Providers
 {
+#if __EMBY__
+    public class Movies : IRemoteMetadataProvider<Movie, MovieInfo>, IHasSupportedExternalIdentifiers
+#else
     public class Movies : IRemoteMetadataProvider<Movie, MovieInfo>
+#endif
     {
         public string Name => Plugin.Instance.Name;
 
@@ -195,5 +199,12 @@ namespace Stash.Providers
         {
             return UGetImageResponse.SendAsync(url, cancellationToken);
         }
+
+#if __EMBY__
+        public string[] GetSupportedExternalIdentifiers()
+        {
+            return new[] { Plugin.Instance.Name };
+        }
+#endif
     }
 }

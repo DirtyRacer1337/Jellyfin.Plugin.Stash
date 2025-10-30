@@ -18,7 +18,7 @@ using MediaBrowser.Controller.Entities.Movies;
 namespace Stash.Providers
 {
 #if __EMBY__
-    public class Collections : IRemoteSearchProvider<BoxSetInfo>
+    public class Collections : IRemoteSearchProvider<BoxSetInfo>, IHasSupportedExternalIdentifiers
 #else
     public class Collections : IRemoteMetadataProvider<BoxSet, BoxSetInfo>
 #endif
@@ -100,5 +100,12 @@ namespace Stash.Providers
         {
             return UGetImageResponse.SendAsync(url, cancellationToken);
         }
+
+#if __EMBY__
+        public string[] GetSupportedExternalIdentifiers()
+        {
+            return new[] { Plugin.Instance.Name };
+        }
+#endif
     }
 }

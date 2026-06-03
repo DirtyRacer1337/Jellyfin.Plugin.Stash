@@ -141,6 +141,11 @@ namespace Stash.Providers
             result.Item.Overview = sceneData.Details;
             result.Item.PremiereDate = sceneData.Date;
 
+            if (sceneData.Rating100.HasValue && sceneData.Rating100.Value > 0)
+            {
+                result.Item.CommunityRating = Math.Min(sceneData.Rating100.Value, 100) / 20.0f;
+            }
+
             var studioName = sceneData.Studio?.Name;
             if (!string.IsNullOrEmpty(studioName))
             {

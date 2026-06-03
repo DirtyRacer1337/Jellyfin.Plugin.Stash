@@ -18,6 +18,9 @@ namespace Stash.Models
         [JsonProperty(PropertyName = "date")]
         public DateTime? Date { get; set; }
 
+        [JsonProperty(PropertyName = "rating100")]
+        public int? Rating100 { get; set; }
+
         [JsonProperty(PropertyName = "paths")]
         public Paths Paths { get; set; }
 
